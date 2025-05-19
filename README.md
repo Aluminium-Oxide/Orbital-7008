@@ -11,7 +11,7 @@ https://www.canva.com/design/DAGnf1NBPFw/PXdrGRE-McXrn5v_3ErkLg/edit?utm_content
 - GPS will not be use as a form of locating as it has a significant error range indoors. (also my gps work very bad on my phone)
 - To seperate the whole CDE by buildings, we can reduce the amount of things required to load and hopefully it can reduce loading time of the web page. 
 
-# Key point to take note (in case later forget）
+# Key point to take note (in case later forget)
 - The web page may be dislocated when open on phone
 - Need a solution if the path detected is no longer avaliable (e.g. renovation) : Either give a button to choose the second shortest path.
 
