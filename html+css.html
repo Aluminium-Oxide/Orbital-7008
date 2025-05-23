@@ -2,64 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>testing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!--适应手机端不让用户缩放-->
+    <title>CDE navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- 引入Tailwind CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"> <!-- 引入Font Awesome-->
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF', // 主色调：深蓝色
+                        secondary: '#00B42A', // 辅助色：绿色（路径）
+                        accent: '#FF7D00', // 强调色：橙色（目的地）
+                    },
+                },
+            }
+        }
+  </script>
 </head>
-<body>
-    <div class="title">CDE map</div>
-    <div class="box">
-        <div class="search">
-            <input class="input" type="text" placeholder="Your destination">
-            <div class="button">Search</search></div>
+
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 -->
+    <header class="sticky top-0 bg-white shadow-md z-40">
+        <div class="container mx-auto px-5 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-primary">CDE map</h1>
+            <button id="menuBtn" class="text-gray-600">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
         </div>
-    </div>
+    </header>
+
+    <header>
+        <div class="fixed bottom-5 left-5 right-5 rounded-xl bg-white p-3 shadow-lg flex items-center space-x-2">
+            <input class="flex-1 px-4 py-1 border border-gray-300 
+            rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" 
+            type="text" placeholder="Your Destination">
+            <button class="bg-primary hover:bg-primary/90 
+            text-white px-2 py-2 rounded-lg transition-colors 
+            touch-manipulation active:scale-95"> <!--按那个小搜索按钮的时候标缩一下-->
+                <i class="fa-solid fa-search mr-2"></i>GO
+            </button>
+        </div>
+    </header>
+    
     <style>
-        .input {
-            padding-left: 10px;
-            border:1px solid rgb(95, 103, 255);
-            outline:none;
-            width:60%;
-            height: 25px;
-            border-radius:10px 0 0 10px; 
-        }
-        .button {
-            width: 13%;
-            background-color: rgb(88, 88, 255);
-            border-radius:0 10px 10px 0;
-            text-align: center;
-            color: #ffff;
-            line-height: 29px;
-            cursor: pointer;
-            user-select: none;
-        }
-        .search {
-            display: flex;
-            padding-left: 20%;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
         body {
             background:linear-gradient(
                 to right,
                 rgb(175, 250, 245),
                 rgb(175, 163, 255)
             );
-        }
-        .box {
-            width:98%;
-            height: 500px;
-            background-color:#ffff;
-            border-radius:5px;
-            margin-top: 30px;
-            margin-left: 1%;
-            padding-top: 20px;
-            box-shadow: rgb(133, 133, 133) 5px 8px 8px;
-        }
-        .title {
-            font-size:30px;
-            font-weight:700px;
-            text-align: center;
-            margin-top: 30px;
         }
     </style>
 </body>
