@@ -1,0 +1,57 @@
+import { useState } from "react";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+function App() {
+  const [destination, setDestination] = useState("");
+
+  const handleSearch = () => {
+    if (destination.trim()) {
+      alert(`Searching for: ${destination}`);
+      // Actual Navigation Algorithm here
+    }
+  };
+
+  return (
+    <div className="bg-gradient-to-r from-cyan-100 to-indigo-100 min-h-screen font-sans">
+      {/* Navigation board */}
+      <header className="sticky top-0 bg-white shadow-md z-40">
+        <div className="container mx-auto px-5 py-3 flex justify-between items-center">
+          <h1 className="text-xl font-bold text-primary">CDE map</h1>
+          <button id="menuBtn" className="text-gray-600">
+            <i className="fa-solid fa-bars text-xl"></i>
+          </button>
+        </div>
+      </header>
+
+      {/* Input + Search button */}
+      <div className="fixed top-20 left-5 right-5 rounded-xl bg-white p-3 shadow-lg flex items-center space-x-2">
+        <input
+          className="flex-1 px-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          type="text"
+          placeholder="Your Destination"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-primary hover:bg-primary/90 text-white px-3 py-2 rounded-lg transition-colors touch-manipulation active:scale-95"
+        >
+          <i className="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+
+      {/* + - buttons */}
+      <div className="absolute bottom-6 right-6 flex flex-col space-y-3 z-10">
+        <button className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100">
+          <i className="fa-solid fa-plus text-dark"></i>
+        </button>
+        <button className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100">
+          <i className="fa-solid fa-minus text-dark"></i>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+export default App;
