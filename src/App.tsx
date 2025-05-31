@@ -48,7 +48,7 @@ function App() {
     
     {/* image of CDE map */}
     <div className="h-[40vh] flex justify-center items-end" style={{ transform: 'translateY(250px)' }}>
-      <img src="/CDEmap.jpg" alt="CDE Map" style={{ width: '450px', height: '450px' }}/>
+      <img src="/CDEmap.png" alt="CDE Map" style={{ width: '450px', height: '450px' }}/>
     </div>
 
       {/* + - buttons */}
