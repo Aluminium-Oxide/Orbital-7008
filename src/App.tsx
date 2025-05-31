@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';  // 引入CSS样式
 import L from 'leaflet';  // 引入Leaflet库
 import { MapContainer, TileLayer } from "react-leaflet";
+import MapComponent from './Component/MapComponent';
 
 function App() {
   const [destination, setDestination] = useState("");
@@ -41,11 +42,6 @@ function App() {
         </div>
       </div>
     </header>
-    
-    {/* image of CDE map */}
-    <div className="h-[40vh] flex justify-center items-end" style={{ transform: 'translateY(250px)' }}>
-      <img src="/CDEmap.png" alt="CDE Map" style={{ width: '500px', height: '500px' }}/>
-    </div>
 
       {/* + - buttons */}
       <div className="absolute bottom-6 right-6 flex flex-col space-y-3 z-10">
@@ -59,6 +55,9 @@ function App() {
           <i className="fa-solid fa-minus text-dark"></i>
         </button>
       </div>
+
+      {/* image of CDE map */}
+      <MapComponent />
     </div>
     </>
   );
