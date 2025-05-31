@@ -2,6 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';  // 引入CSS样式
 import L from 'leaflet';  // 引入Leaflet库
+import { MapContainer, TileLayer } from "react-leaflet";
 
 function App() {
   const [destination, setDestination] = useState("");
