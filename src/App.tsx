@@ -1,5 +1,8 @@
 import { useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer } from "react-leaflet";
+
 
 function App() {
   const [destination, setDestination] = useState("");
