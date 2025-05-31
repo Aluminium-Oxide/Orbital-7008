@@ -1,5 +1,7 @@
-import { useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import React, { useEffect, useRef, useState } from 'react';
+import 'leaflet/dist/leaflet.css';  // 引入CSS样式
+import L from 'leaflet';  // 引入Leaflet库
 
 function App() {
   const [destination, setDestination] = useState("");
