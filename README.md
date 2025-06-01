@@ -12,7 +12,7 @@ Navigating a big university campus could be tough and challenging for freshmen a
 
 # Core features:
 1. Interactive map:
-- The main page of the website is a 2D map of CDE with buttons of buildings' names. Click the buttons and it will bring you to the layered floorplan of the particular building. (refer to the link: https://i.imgur.com/6vc57bj.png)
+- The main page of the website is a 2D map of CDE with buttons of buildings' names. Click the buttons and it will bring you to the layered floorplan of the particular building. 
 - By clicking the detailed floor, you can access the floorplan of this floor.
 
 2. Navigation: 
