@@ -112,7 +112,7 @@ useEffect(() => {
         crs={PixelCRS}
         center={[mapHeight / 2, mapWidth / 2]}
         zoom={initialZoom}
-        maxZoom={4}
+        maxZoom={2}
         minZoom={initialZoom - 2}
         style={{ height: '100%', width: '100%' }}
       >
