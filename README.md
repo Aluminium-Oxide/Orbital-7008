@@ -31,5 +31,10 @@ Navigating a big university campus could be tough and challenging for freshmen a
 
 # Project Scope: 
 A CDE navigation platform using leaflet, enables students to check the floorplans of each buildings and find their way by entering their locations and destinations.
+This project aims to develop an online website map tool for the College of Design and Engineering (CDE) at NUS. The tool contains several 2D maps that enable users to interact with to find their way around inside multiple connected buildings that have complicated layouts. Basically, users can enter where they are now and where they want to go, and the platform will show them the relevant building layout and the best route to get there, including how to move between different floors and buildings.
 
-# Milestone 1
+# Milestone 1 Deliverables
+1. Frontend: During the first milestone, we focus on designing the user interface and exploring different features. We aim to create a simple, easy-to-use main page that includes a basic interactive map (see core features). To achieve this, we made a simple prototype with just one building (Block EA), with options to click on different floors to see different maps. We also spent a lot of time learning how to use a map software called Leaflet, which helps us load custom maps, manage different map layers, and plan for more advanced routing features in the future.
+
+2. Import floorplan of EA building for prototyping the functions.
+By testing the interactive map with just one building, we've built a flexible framework that we can expand later to include more buildings and map layers. The prototype shows how users can view floors and get ready to move between nearby sections. Although we haven't yet connected everything to a backend system or created routes between multiple buildings, this early work sets the foundation for a more detailed and flexible navigation system that considers the specific layout of the CDE area.
