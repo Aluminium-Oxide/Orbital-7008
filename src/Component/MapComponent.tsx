@@ -141,6 +141,22 @@ useEffect(() => {
           </Marker>
         ))}
       </MapContainer>
+
+      {selectedBuilding && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-9999999999999999">
+          <div className="bg-white rounded-lg shadow-lg max-w-[90%] max-h-[90%] p-4 relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold"
+              onClick={closePopup}>×
+            </button>
+            <h2 className="text-lg font-semibold mb-2 text-center">Block {selectedBuilding.name} </h2>
+            <img
+              src={`/building-images/${selectedBuilding.name}.png`}
+              alt={selectedBuilding.name}
+              className="max-w-full object-contain mx-auto"/>
+          </div>
+        </div>
+)}
     </div>
   );
 };
