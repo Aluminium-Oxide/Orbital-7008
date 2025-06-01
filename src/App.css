@@ -61,3 +61,12 @@ header {
 .leaflet-popup-tip {
   background: white;
 }  
+
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+.building-label {
+  transition: transform 0.2s ease;
+  will-change: transform;
+}

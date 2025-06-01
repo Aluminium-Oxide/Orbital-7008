@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
+import L, { map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, ImageOverlay, Marker, Popup } from 'react-leaflet';
 import { useMapEvents } from 'react-leaflet';  // useMapEvents hook for handling map events
@@ -24,25 +24,42 @@ type Building = {
   y: number;
 };
 
-// 建筑数据
+const Icon = (name: string): L.DivIcon => {
+  return L.divIcon({
+    className: 'building-label', 
+    html: `
+      <div class="relative building-label flex items-center justify-center">
+        <div class= "bg-purple-300 text-black px-2 py-1 rounded shadow text-xs border border-gray-400 hover:bg-purple-200 cursor-pointer whitespace-nowrap active:scale-95">
+          ${name}
+        </div>
+      </div>`,
+    iconSize: [100, 30],
+    iconAnchor: [50, 15], 
+  });
+};
+
+// 建筑
 const buildings = [
-  { id: 0, name: "EA", x: 200, y: 300 },
-  { id: 11, name: "E1A", x: 200, y: 300 },
-  { id: 1, name: "E1", x: 200, y: 300 },
-  { id: 22, name: "E2A", x: 200, y: 300 },
-  { id: 2, name: "E2", x: 200, y: 300 },
-  { id: 33, name: "E3A", x: 200, y: 300 },
-  { id: 3, name: "E3", x: 200, y: 300 },
-  { id: 44, name: "E4A", x: 200, y: 300 },
-  { id: 4, name: "E4", x: 200, y: 300 },
-  { id: 5, name: "E5", x: 200, y: 300 },
-  { id: 6, name: "E6", x: 200, y: 300 },
-  { id: 7, name: "E7", x: 200, y: 300 },
-  { id: 8, name: "E8", x: 200, y: 300 },
-  { id: 10, name: "SDE1", x: 200, y: 300 },
-  { id: 20, name: "SDE2", x: 200, y: 300 },
-  { id: 30, name: "SDE3", x: 200, y: 300 },
-  { id: 40, name: "SDE4", x: 200, y: 300 },
+  { id: 0, name: "EA", x: 356, y: 116 },
+  { id: 11, name: "E1A", x: 364, y: 600 },
+  { id: 1, name: "E1", x: 520, y: 900 },
+  { id: 22, name: "E2A", x: 663, y: 874 },
+  { id: 2, name: "E2", x: 594, y: 610 },
+  { id: 33, name: "E3A", x: 644, y: 200 },
+  { id: 3, name: "E3", x: 819, y: 582 },
+  { id: 44, name: "E4A", x: 1218, y: 963 },
+  { id: 4, name: "E4", x: 872, y: 947 },
+  { id: 5, name: "E5", x: 1126, y: 1220 },
+  { id: 6, name: "E6", x: 1389, y: 703 },
+  { id: 7, name: "E7", x: 1537, y: 955 },
+  { id: 8, name: "E8", x: 1149, y: 723 },
+  { id: 10, name: "SDE1", x: 316, y: 1523 },
+  { id: 20, name: "SDE2", x: 536, y: 1559 },
+  { id: 30, name: "SDE3", x: 276, y: 1243 },
+  { id: 40, name: "SDE4", x: 160, y: 1727 },
+  { id: 9, name: "Techno", x: 697, y: 1239 },
+  { id: 99, name: "T-Lab", x: 957, y: 452 },
+  { id: 50, name: "EW1", x: 381, y: 1013 },
 ];
 
 // 自定义像素坐标投影
@@ -66,25 +83,22 @@ const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
   infinite: true,
 });
 
-
-
 const MapComponent = () => {
-  const mapRef = useRef(null);
+  const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
-  const mapWidth = 1000; // 底图宽度（像素）
-  const mapHeight = 1000; // 底图高度（像素）
+  const mapWidth = 1707; // 底图宽度（像素）
+  const mapHeight = 1889; // 底图高度（像素）
 
-  useEffect(() => {
-    if (mapRef.current) {
-      // 地图初始化后在这里添加自定义逻辑
-    }
-  }, []);
-  
   // 计算初始视图，确保地图完整显示
   const initialZoom = Math.min(
     Math.log2(window.innerWidth / mapWidth),
     Math.log2(window.innerHeight / mapHeight)
   );
+
+useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+}, []);
 
   // 关闭弹窗
   const closePopup = () => {
@@ -94,7 +108,7 @@ const MapComponent = () => {
   return (
     <div className="relative h-[90vh] w-full">
       <MapContainer
-        ref={mapRef}
+        ref={mapRef as any}
         crs={PixelCRS}
         center={[mapHeight / 2, mapWidth / 2]}
         zoom={initialZoom}
@@ -102,7 +116,7 @@ const MapComponent = () => {
         minZoom={initialZoom - 2}
         style={{ height: '100%', width: '100%' }}
       >
-        {/* 你的图层组件 */}
+        {/* 图层组件 */}
 
         {/* 添加底图 */}
         <ImageOverlay
@@ -119,6 +133,7 @@ const MapComponent = () => {
           <Marker
             key={building.id}
             position={[building.y, building.x]}
+            icon={Icon(building.name)}
             eventHandlers={{
               click: () => setSelectedBuilding(building)
             }}
@@ -131,8 +146,4 @@ const MapComponent = () => {
 };
 
 export default MapComponent;    
-
-
-
-
 
