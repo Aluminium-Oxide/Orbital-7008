@@ -1,7 +1,7 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import React, { useEffect, useRef, useState } from 'react';
-import 'leaflet/dist/leaflet.css';  // 引入CSS样式
-import L from 'leaflet';  // 引入Leaflet库
+import 'leaflet/dist/leaflet.css';  // import CSS
+import L from 'leaflet';  // import Leaflet
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapComponent from './Component/MapComponent';
 
@@ -48,12 +48,7 @@ function App() {
         <button id="menuBtn" className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95">
           <i className="fa-solid fa-bars text-xl"></i>
         </button>
-        <button className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95">
-          <i className="fa-solid fa-plus text-dark"></i>
-        </button>
-        <button className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95">
-          <i className="fa-solid fa-minus text-dark"></i>
-        </button>
+       
       </div>
 
       {/* image of CDE map */}

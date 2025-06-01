@@ -2,6 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, ImageOverlay, Marker, Popup } from 'react-leaflet';
+import { useMapEvents } from 'react-leaflet';  // useMapEvents hook for handling map events
+
+// MapClickLogger, monitor map click events and record coordinates
+function MapClickLogger() {
+  console.log("MapClickLogger mounted");
+  useMapEvents({
+    click(e) {
+      const { lat, lng } = e.latlng;
+      console.log(`Location: x = ${lng.toFixed(0)}, y = ${lat.toFixed(0)}`);
+    }
+  });
+  return null;
+}
+
 
 type Building = {
   id: number;
@@ -94,7 +108,11 @@ const MapComponent = () => {
         <ImageOverlay
           url="/CDEmap.png"
           bounds={[[0, 0], [mapHeight, mapWidth]]}
+          interactive={true}
         />
+
+        {/* Add MapClickLogger */}
+        <MapClickLogger />
         
         {/* 添加建筑标记 */}
         {buildings.map(building => (
