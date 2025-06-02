@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import 'leaflet/dist/leaflet.css';  // import CSS
 import MapComponent from './Component/MapComponent';
 import './index.css'
+import './App.css'; // import custom styles
 
 function App() {
   const [destination, setDestination] = useState("");
@@ -43,7 +44,7 @@ function App() {
 
       {/* menu button */}
       <div className="absolute bottom-6 right-6 flex flex-col space-y-3 z-10">
-        <button id="menuBtn" className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95">
+        <button id="menuBtn" className="w-12 h-12 z-20 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95">
           <i className="fa-solid fa-bars text-xl"></i>
         </button>
        
