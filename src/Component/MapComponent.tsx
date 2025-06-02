@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import L, { map } from 'leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, ImageOverlay, Marker, Popup } from 'react-leaflet';
-import { useMapEvents } from 'react-leaflet';  // useMapEvents hook for handling map events
+import { MapContainer, ImageOverlay, Marker, useMapEvents } from 'react-leaflet';
 
-// MapClickLogger, monitor map click events and record coordinates
+// MapClickLogger
 function MapClickLogger() {
   console.log("MapClickLogger mounted");
   useMapEvents({
@@ -15,7 +14,6 @@ function MapClickLogger() {
   });
   return null;
 }
-
 
 type Building = {
   id: number;
@@ -38,7 +36,7 @@ const Icon = (name: string): L.DivIcon => {
   });
 };
 
-// 建筑
+// all the buildings 
 const buildings = [
   { id: 0, name: "EA", x: 356, y: 116 },
   { id: 11, name: "E1A", x: 364, y: 600 },
@@ -62,13 +60,12 @@ const buildings = [
   { id: 50, name: "EW1", x: 381, y: 1013 },
 ];
 
-// 自定义像素坐标投影
+// coordinateds of the picures 
 const PixelProjection = {
   project: (latlng: L.LatLng) => L.point(latlng.lng, latlng.lat),
   unproject: (point: L.Point) => L.latLng(point.y, point.x),
 };
 
-// 自定义CRS
 const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
   code: 'PixelCRS',
   projection: PixelProjection,
@@ -86,10 +83,10 @@ const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
 const MapComponent = () => {
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
-  const mapWidth = 1707; // 底图宽度（像素）
-  const mapHeight = 1889; // 底图高度（像素）
+  const mapWidth = 1707;
+  const mapHeight = 1889;
 
-  // 计算初始视图，确保地图完整显示
+  //to exsure that the initial map is complete
   const initialZoom = Math.min(
     Math.log2(window.innerWidth / mapWidth),
     Math.log2(window.innerHeight / mapHeight)
@@ -100,7 +97,6 @@ useEffect(() => {
     if (!map) return;
 }, []);
 
-  // 关闭弹窗
   const closePopup = () => {
     setSelectedBuilding(null);
   };
@@ -114,21 +110,17 @@ useEffect(() => {
         zoom={initialZoom}
         maxZoom={2}
         minZoom={initialZoom - 2}
-        style={{ height: '100%', width: '100%' }}
-      >
-        {/* 图层组件 */}
+        style={{ height: '100%', width: '100%' }}>
 
-        {/* 添加底图 */}
+        {/* base map  */}
         <ImageOverlay
           url="/CDEmap.png"
           bounds={[[0, 0], [mapHeight, mapWidth]]}
-          interactive={true}
-        />
+          interactive={true}/>
 
         {/* Add MapClickLogger */}
         <MapClickLogger />
         
-        {/* 添加建筑标记 */}
         {buildings.map(building => (
           <Marker
             key={building.id}
@@ -136,8 +128,7 @@ useEffect(() => {
             icon={Icon(building.name)}
             eventHandlers={{
               click: () => setSelectedBuilding(building)
-            }}
-          >
+            }}>
           </Marker>
         ))}
       </MapContainer>
