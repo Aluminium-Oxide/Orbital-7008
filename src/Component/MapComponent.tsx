@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet'; //delete {map} cuz we just use Mapcontainer in react-leaflet
 import 'leaflet/dist/leaflet.css';
-import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup } from 'react-leaflet';
+import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet';
 
 // coordinateds of the picures 
 const PixelProjection = {
@@ -51,7 +51,7 @@ const Icon = (name: string): L.DivIcon => {
   });
 };
 
-// 建筑
+// engi buildings
 const buildings = [
   {id: 0, name: "EA", x: 356, y: 116},
   {id: 1, name: "E1", x: 520, y: 900},
@@ -78,24 +78,38 @@ const buildings = [
 const MapComponent = () => {
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
-  const mapWidth = 1707; // 底图宽度（像素）
-  const mapHeight = 1889; // 底图高度（像素）
+  const mapWidth = 1707; // map width
+  const mapHeight = 1889; // map height
 
-  // 计算初始视图，确保地图完整显示
   const initialZoom = Math.min(
     Math.log2(window.innerWidth / mapWidth),
     Math.log2(window.innerHeight / mapHeight)
   );
 
-useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-}, []);
+  const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
+  /*change no here to edit pop up position(see later pic size)*/
 
-  // 关闭弹窗
-  const closePopup = () => {
-    setSelectedBuilding(null);
-  };
+  const FixedPopup = ({ building, position }: { building: Building | null; position: [number, number] }) => {
+  const map = useMap();
+
+useEffect(() => {
+    if (building) {
+      const popup = L.popup({ maxWidth: 500, className: 'popup-bottom' })
+        .setLatLng(position)
+        .setContent(`
+          <div class="text-center">
+            <h2 class="font-semibold mb-2">Block ${building.name}</h2>
+            <img src="/building-images/${building.name}.png" alt="${building.name}" class="max-w-full object-contain" />
+          </div>
+        `);
+      popup.openOn(map);
+    } else {
+      map.closePopup();
+    }
+  }, [building, map, position]);
+
+  return null;
+};
 
  return (
     <div className="relative h-[90vh] w-full base-map-container">
@@ -128,34 +142,10 @@ useEffect(() => {
               click: () => setSelectedBuilding(building)
             }}
           >
-            <Popup maxWidth={500}>
-              <div className="text-center">
-                <h2 className="font-semibold mb-2">Block {building.name}</h2>
-                <img
-                src={`/building-images/${building.name}.png`}
-                alt={building.name}
-                className="max-w-full object-contain" />
-              </div>
-            </Popup>
           </Marker>
         ))}
+        <FixedPopup building={selectedBuilding} position={popupPosition} />
       </MapContainer>
-
-      {/* selectedBuilding && (
-        //<div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-          //<div className="bg-white rounded-lg shadow-lg max-w-[90%] max-h-[90%] p-4 relative z-50">
-            //<button
-              //className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold"
-              //</div>onClick={closePopup}>×
-            //</button>
-            //<h2 className="text-lg font-semibold mb-2 text-center">Block {selectedBuilding.name} </h2>
-            //<img
-              //src={`/building-images/${selectedBuilding.name}.png`}
-              //alt={selectedBuilding.name}
-              //className="max-w-full object-contain mx-auto"/>
-          //</div>
-        //</div>
-) */}
     </div>
   );
 };
