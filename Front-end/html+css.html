@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!--适应手机端不让用户缩放-->
+    <title>CDE navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- 引入Tailwind CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"> <!-- 引入Font Awesome-->
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF', // 主色调：深蓝色
+                        secondary: '#00B42A', // 辅助色：绿色（路径）
+                        accent: '#FF7D00', // 强调色：橙色（目的地）
+                    },
+                },
+            }
+        }
+  </script>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 -->
+    <header class="sticky top-0 bg-white shadow-md z-40">
+        <div class="container mx-auto px-5 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-primary">CDE map</h1>
+            <button id="menuBtn" class="text-gray-600">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <header>
+        <div class="fixed top-20 left-5 right-5 rounded-xl bg-white p-3 shadow-lg flex items-center space-x-2">
+            <input class="flex-1 px-4 py-1 border border-gray-300 
+            rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" 
+            type="text" placeholder="Your Destination">
+            <button class="bg-primary hover:bg-primary/90 
+            text-white px-3 py-2 rounded-lg transition-colors 
+            touch-manipulation active:scale-95"> <!--按那个小搜索按钮的时候标缩一下-->
+            <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </header>
+    
+    <div class="absolute bottom-6 right-6 flex flex-col space-y-3 z-10">
+        <button class="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100">
+          <i class="fa-solid fa-plus text-dark"></i>
+        </button>
+        <button class="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100">
+          <i class="fa-solid fa-minus text-dark"></i>
+        </button>
+      </div>
+    
+    <style>
+        body {
+            background:linear-gradient(
+                to right,
+                rgb(175, 250, 245),
+                rgb(175, 163, 255)
+            );
+        }
+    </style>
+</body>
+</html>
