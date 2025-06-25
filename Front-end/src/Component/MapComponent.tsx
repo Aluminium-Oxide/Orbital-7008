@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet'; //delete {map} cuz we just use Mapcontainer in react-leaflet
 import 'leaflet/dist/leaflet.css';
-import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet';
+import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap, TileLayer } from 'react-leaflet';
 
 // coordinateds of the picures 
 const PixelProjection = {
@@ -41,6 +41,12 @@ type Building = {
   y: number;
 };
 
+type Node = {
+  id: string;
+  name: string;
+  position: [number, number];
+};
+
 const Icon = (name: string): L.DivIcon => {
   return L.divIcon({
     className: 'building-label',
@@ -54,6 +60,13 @@ const Icon = (name: string): L.DivIcon => {
     iconAnchor: [50, 15],
   });
 };
+
+const nodeIcon = new L.Icon({
+  iconUrl: "/icons/marker-icon.png", // 自定义图标
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
 
 // engi buildings
 const buildings = [
@@ -82,6 +95,7 @@ const buildings = [
 const MapComponent = () => {
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
+  const [nodes, setNodes] = useState<Node[]>([]);
   const mapWidth = 1707; // map width
   const mapHeight = 1889; // map height
 
@@ -91,8 +105,15 @@ const MapComponent = () => {
   );
 
   const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
-  /*change no here to edit pop up position(see later pic size)*/
+  /*change no. here to edit pop up position(see later pic size)*/
 
+  useEffect(() => {
+    fetch("/data/nodes.json")
+      .then((res) => res.json())
+      .then((data) => setNodes(data))
+      .catch((err) => console.error("Failed to load node data:", err));
+  }, []);
+  
   const FixedPopup = ({ building, position }: { building: Building | null; position: [number, number] }) => {
     const map = useMap();
 
@@ -138,11 +159,23 @@ const MapComponent = () => {
 
         {buildings.map(building => (
           <Marker
-            key={building.id} position={[building.y, building.x]} icon={Icon(building.name)}
+            key={building.id}
+            position={[building.y, building.x]}
+            icon={Icon(building.name)}
             eventHandlers={{ click: () => setSelectedBuilding(building) }}
           />
         ))}
 
+        {/* Nodes (教室/楼梯等) */}
+        {nodes.map((node) => (
+          <Marker
+            key={node.id}
+            position={node.position}
+            icon={nodeIcon}
+          >
+            <Popup>{node.name}</Popup>
+          </Marker>
+        ))}
 
         <FixedPopup building={selectedBuilding} position={popupPosition} />
       </MapContainer>
