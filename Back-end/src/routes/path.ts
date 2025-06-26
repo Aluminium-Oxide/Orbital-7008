@@ -24,7 +24,7 @@ const buildingGraphs: Record<string, {
   }
 };
 
-// Dijkstra 最短路径算法实现
+// 最短路径算法Z
 function dijkstra(
   nodes: string[],
   edges: { from: string; to: string; distance: number }[],
