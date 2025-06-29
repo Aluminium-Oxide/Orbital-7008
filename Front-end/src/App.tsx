@@ -56,6 +56,9 @@ function App() {
             <option value="L2">L2</option>
             <option value="L3">L3</option>
             <option value="L4">L4</option>
+            <option value="L5">L5</option>
+            <option value="L6">L6</option>
+            <option value="L7">L7</option>
           </select>
           {/*room selection*/}
           <select
