@@ -2,7 +2,6 @@ interface Node {
   id: string;
   x: number;
   y: number;
-  floor: number;
 }
 
 interface Edge {
@@ -11,9 +10,15 @@ interface Edge {
   distance: number;
 }
 
+export interface levels {
+  image: string;
+  bounds: [[number, number], [number, number]];
+  nodes: Node[];
+  edges: Edge[];
+}
+
 export interface Building {
   name: string;
   floors: number;
-  nodes: Node[];
-  edges: Edge[];
+  levels:Record<string, levels>
 }
