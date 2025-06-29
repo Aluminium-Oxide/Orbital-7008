@@ -7,11 +7,10 @@ import './App.css'; // import custom styles
 
 function App() {
   const [destination, setDestination] = useState("");
-
+  const [currentFloor, setCurrentFloor] = useState("L1"); 
   const handleSearch = () => {
     if (destination.trim()) {
-      alert(`Searching for: ${destination}`);
-      // can input further navigation logic here
+      console.log(`Searching for: ${destination}`);
     }
   };
 
@@ -22,25 +21,57 @@ function App() {
     
     {/* navigation frame*/}
     <header className="sticky top-0 bg-blue-800 shadow-md z-40">
-      <div className="container mx-auto px-5 py-4 flex justify-between items-center">
-        {/* title */}        {/* BUG! will be block by input bar if scree is nearrow*/}
+      <div className="container mx-auto px-5 py-0">
+        {/* title */}
+        <div className="flex justify-left py-3 px-6">
         <h1 className="text-xl font-bold text-white">CDE Map</h1>
-        {/* input frame + search button*/}
-        <div className="absolute top-15 left-1/2 transform -translate-x-1/2 w-11/12 max-w-xl shadow-lg flex items-center space-x-2">
-          <input
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
-            type="text"
-            placeholder="Your Destination"
-            value={destination}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDestination(e.target.value)}/>
-          <button
-            onClick={handleSearch}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg transition-colors touch-manipulation active:scale-95">
-          <i className="fa-solid fa-magnifying-glass"></i>
-          </button>
         </div>
-      </div>
+          </div>
     </header>
+
+        {/* input frame + search button*/}
+        <div className=" bg-blue-400 w-full shadow-md">
+        <div className="grid grid-cols-4 gap-5 px-5 py-3">
+          <label htmlFor="building" className="text-white text-xl font-medium mb-1 flex justify-center items-center">
+          Destination:
+        </label>
+        {/*building selection*/}
+          <select
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}>
+            <option value="" disabled>Block </option>
+            <option value="EA">EA</option>
+            <option value="E1">E1</option>
+            <option value="E2">E2</option>
+            <option value="E2">E3</option>
+          </select>
+          {/*floor selection*/}
+          <select
+            value = {currentFloor}
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
+            onChange={(e) => setCurrentFloor(e.target.value)}>
+            <option value="" disabled>Floor </option>
+            <option value="L1">L1</option>
+            <option value="L2">L2</option>
+            <option value="L3">L3</option>
+            <option value="L4">L4</option>
+          </select>
+          {/*room selection*/}
+          <select
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}>
+            <option value="" disabled>Room </option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+          </select>
+        </div>
+        </div>
+
+
 
       {/* menu button */}
       <div className="absolute bottom-6 right-6 flex flex-col space-y-3 z-10">
@@ -51,7 +82,9 @@ function App() {
       </div>
 
       {/* CDE map leaflet */}
-      <MapComponent />
+      <MapComponent 
+      destination={destination}
+      currentFloor={currentFloor}/>
     </div>
     </>
   );

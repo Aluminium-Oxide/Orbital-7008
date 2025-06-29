@@ -92,13 +92,20 @@ const buildings = [
   { id: 19, name: "EW1", x: 381, y: 1013 },
 ];
 
-const MapComponent = () => {
+interface MapComponentProps {
+  destination: string;
+  currentFloor: string;
+}
+
+const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }) => {
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
+  const [floorImageUrl,setFloorImageUrl] = useState<string>("");
+  const [navigationMode, setNavigationMode] = useState(false);
+  const [levelKey, setLevelKey] = useState<string>("L1");
   const mapWidth = 1707; // map width
   const mapHeight = 1889; // map height
-
   const initialZoom = Math.min(
     Math.log2(window.innerWidth / mapWidth),
     Math.log2(window.innerHeight / mapHeight)
@@ -107,12 +114,45 @@ const MapComponent = () => {
   const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
   /*change no. here to edit pop up position(see later pic size)*/
 
+  /*进入，退出导航模式*/
   useEffect(() => {
-    fetch("/data/nodes.json")
+    if (destination && destination.trim() !== '') {
+      setNavigationMode(true);
+      setLevelKey('L1');
+    } else {
+      setNavigationMode(false);
+      setNodes([]);
+      setSelectedBuilding(null);
+    }
+  }, [destination]);
+
+  useEffect(() => {
+    if (!navigationMode || !destination) return;
+    fetch(`http://localhost:3001/api/buildings/${destination}`)
       .then((res) => res.json())
-      .then((data) => setNodes(data))
+      .then((data) => {
+      const levelKey = currentFloor; 
+      const levelData = data.levels[levelKey];
+      if (!levelData) {
+        console.error(`level ${levelKey} not found`);
+        return;
+      }
+      {/*setFloorImageUrl(`/map/${destination}${levelKey}.png`);*/}
+      const imageUrl = `${destination}${currentFloor}.png`;
+      console.log("尝试加载图片:", imageUrl);
+      setFloorImageUrl(imageUrl);
+
+      const processedNodes : Node[] = levelData.nodes
+        .filter((n: any) => n.x != null && n.y != null)
+          .map((n: any) => ({
+            ...n,
+            position: [n.y, n.x] as [number, number],
+          }));
+
+      setNodes(processedNodes);
+    })
       .catch((err) => console.error("Failed to load node data:", err));
-  }, []);
+  }, [navigationMode, destination, currentFloor]);
   
   const FixedPopup = ({ building, position }: { building: Building | null; position: [number, number] }) => {
     const map = useMap();
@@ -138,6 +178,20 @@ const MapComponent = () => {
 
   return (
     <div className="relative h-[90vh] w-full base-map-container">
+      {/* 退出导航按钮 */}
+      {navigationMode && (
+        <button
+          onClick={() => {
+            setNavigationMode(false);
+            setNodes([]);
+            setSelectedBuilding(null);
+          }}
+          className="absolute top-4 right-4 z-[1000] bg-blue-500 text-white px-3 py-2 rounded"
+        >
+          Back
+        </button>
+      )}
+      
       <MapContainer
         ref={mapRef as any}
         crs={PixelCRS}
@@ -147,17 +201,25 @@ const MapComponent = () => {
         minZoom={initialZoom - 2}
         style={{ height: '100%', width: '100%', zIndex: '1' }}>
 
-        {/* base map  */}
+        {/* base map  change when nav start*/}
+      {navigationMode ? (
+        <ImageOverlay
+          url={`/map/${floorImageUrl}`}
+          bounds={[[0, 0], [1640, 2360]]}
+          interactive={true}
+        />
+      ) : (
         <ImageOverlay
           url="/CDEmap.png"
           bounds={[[0, 0], [mapHeight, mapWidth]]}
           interactive={true}
         />
+      )}
 
         {/* Add Coordinates */}
         <Coordinates />
-
-        {buildings.map(building => (
+              
+        {!navigationMode && buildings.map(building => (
           <Marker
             key={building.id}
             position={[building.y, building.x]}
@@ -166,8 +228,9 @@ const MapComponent = () => {
           />
         ))}
 
-        {/* Nodes (教室/楼梯等) */}
-        {nodes.map((node) => (
+        {navigationMode && nodes.map((node) => {
+           if (!node.position || node.position.length !== 2) return null;
+          return (
           <Marker
             key={node.id}
             position={node.position}
@@ -175,7 +238,8 @@ const MapComponent = () => {
           >
             <Popup>{node.name}</Popup>
           </Marker>
-        ))}
+          );
+        })}
 
         <FixedPopup building={selectedBuilding} position={popupPosition} />
       </MapContainer>
