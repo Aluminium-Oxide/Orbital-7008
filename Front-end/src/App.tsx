@@ -31,7 +31,7 @@ function App() {
 
         {/* input frame + search button*/}
         <div className=" bg-blue-400 w-full shadow-md">
-        <div className="grid grid-cols-4 gap-5 px-5 py-3">
+        <div className="grid grid-cols-4 gap-5 pl-5 pr-8 py-3">
           <label htmlFor="building" className="text-white text-xl font-medium mb-1 flex justify-center items-center">
           Destination:
         </label>
@@ -40,7 +40,7 @@ function App() {
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}>
-            <option value="" disabled>Block </option>
+            <option value="" disabled> Block </option>
             <option value="EA">EA</option>
             <option value="E1">E1</option>
             <option value="E2">E2</option>
@@ -51,7 +51,7 @@ function App() {
             value = {currentFloor}
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
             onChange={(e) => setCurrentFloor(e.target.value)}>
-            <option value="" disabled>Floor </option>
+            <option value="" disabled> Floor </option>
             <option value="L1">L1</option>
             <option value="L2">L2</option>
             <option value="L3">L3</option>
@@ -62,7 +62,7 @@ function App() {
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}>
-            <option value="" disabled>Room </option>
+            <option value="" disabled> Room </option>
             <option value="01">01</option>
             <option value="02">02</option>
             <option value="03">03</option>
