@@ -199,6 +199,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
         zoom={initialZoom}
         maxZoom={2}
         minZoom={initialZoom - 2}
+        maxBounds={[[0, 0], [mapHeight, mapWidth]]}
+        maxBoundsViscosity={1.0}
         style={{ height: '100%', width: '100%', zIndex: '1' }}>
 
         {/* base map  change when nav start*/}
