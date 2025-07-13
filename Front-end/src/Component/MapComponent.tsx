@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import L from 'leaflet'; //delete {map} cuz we just use Mapcontainer in react-leaflet
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap, TileLayer } from 'react-leaflet';
+import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet';
 
-// coordinateds of the picures 
+// Pixel CRS config
 const PixelProjection = {
   project: (latlng: L.LatLng) => L.point(latlng.lng, latlng.lat),
   unproject: (point: L.Point) => L.latLng(point.y, point.x),
@@ -23,12 +23,11 @@ const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
   infinite: true,
 });
 
-// See coordinates-updated
 function Coordinates() {
   useMapEvents({
     click(e) {
-      const { lat, lng } = e.latlng;     //get latitude and longitude
-      const x = lng; const y = lat; console.log(x, y);
+      const { lat, lng } = e.latlng;
+      console.log(lng, lat);
     }
   });
   return null;
@@ -52,7 +51,7 @@ const Icon = (name: string): L.DivIcon => {
     className: 'building-label',
     html: `
       <div class="relative building-label flex items-center justify-center">
-        <div class= "bg-purple-300 text-black px-2 py-1 rounded shadow text-xs border border-gray-400 hover:bg-purple-200 cursor-pointer whitespace-nowrap active:scale-95">
+        <div class="bg-purple-300 text-black px-2 py-1 rounded shadow text-xs border border-gray-400 hover:bg-purple-200 cursor-pointer whitespace-nowrap active:scale-95">
           ${name}
         </div>
       </div>`,
@@ -62,14 +61,13 @@ const Icon = (name: string): L.DivIcon => {
 };
 
 const nodeIcon = new L.Icon({
-  iconUrl: "/icons/marker-icon.png", // 自定义图标
+  iconUrl: "/icons/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 });
 
-// engi buildings
-const buildings = [
+const buildings: Building[] = [
   { id: 0, name: "EA", x: 356, y: 116 },
   { id: 1, name: "E1", x: 520, y: 900 },
   { id: 2, name: "E2", x: 594, y: 610 },
@@ -101,20 +99,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
-  const [floorImageUrl,setFloorImageUrl] = useState<string>("");
+  const [floorImageUrl, setFloorImageUrl] = useState<string>("");
   const [navigationMode, setNavigationMode] = useState(false);
   const [levelKey, setLevelKey] = useState<string>("L1");
-  const mapWidth = 1707; // map width
-  const mapHeight = 1889; // map height
+
+  const mapWidth = 1707;
+  const mapHeight = 1889;
   const initialZoom = Math.min(
     Math.log2(window.innerWidth / mapWidth),
     Math.log2(window.innerHeight / mapHeight)
   );
 
   const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
-  /*change no. here to edit pop up position(see later pic size)*/
 
-  /*进入，退出导航模式*/
   useEffect(() => {
     if (destination && destination.trim() !== '') {
       setNavigationMode(true);
@@ -123,37 +120,40 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       setNavigationMode(false);
       setNodes([]);
       setSelectedBuilding(null);
+      if (mapRef.current) {
+        mapRef.current.closePopup();
+      }
     }
   }, [destination]);
 
   useEffect(() => {
     if (!navigationMode || !destination) return;
+
     fetch(`http://localhost:3001/api/buildings/${destination}`)
       .then((res) => res.json())
       .then((data) => {
-      const levelKey = currentFloor; 
-      const levelData = data.levels[levelKey];
-      if (!levelData) {
-        console.error(`level ${levelKey} not found`);
-        return;
-      }
-      {/*setFloorImageUrl(`/map/${destination}${levelKey}.png`);*/}
-      const imageUrl = `${destination}${currentFloor}.png`;
-      console.log("尝试加载图片:", imageUrl);
-      setFloorImageUrl(imageUrl);
+        const levelData = data.levels[currentFloor];
+        if (!levelData) {
+          console.error(`Level ${currentFloor} not found`);
+          return;
+        }
 
-      const processedNodes : Node[] = levelData.nodes
-        .filter((n: any) => n.x != null && n.y != null)
+        const imageUrl = `${destination}${currentFloor}.png`;
+        console.log("加载楼层图:", imageUrl);
+        setFloorImageUrl(imageUrl);
+
+        const processedNodes: Node[] = levelData.nodes
+          .filter((n: any) => n.x != null && n.y != null)
           .map((n: any) => ({
             ...n,
             position: [n.y, n.x] as [number, number],
           }));
 
-      setNodes(processedNodes);
-    })
+        setNodes(processedNodes);
+      })
       .catch((err) => console.error("Failed to load node data:", err));
   }, [navigationMode, destination, currentFloor]);
-  
+
   const FixedPopup = ({ building, position }: { building: Building | null; position: [number, number] }) => {
     const map = useMap();
 
@@ -178,22 +178,24 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
 
   return (
     <div className="relative h-[90vh] w-full base-map-container">
-      {/* 退出导航按钮 */}
       {navigationMode && (
         <button
           onClick={() => {
             setNavigationMode(false);
             setNodes([]);
             setSelectedBuilding(null);
+            if (mapRef.current) {
+              mapRef.current.closePopup();
+            }
           }}
           className="absolute top-4 right-4 z-[1000] bg-blue-500 text-white px-3 py-2 rounded"
         >
           Back
         </button>
       )}
-      
+
       <MapContainer
-        ref={mapRef as any}
+        ref={mapRef}
         crs={PixelCRS}
         center={[mapHeight / 2, mapWidth / 2]}
         zoom={initialZoom}
@@ -201,38 +203,36 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
         minZoom={initialZoom - 2}
         maxBounds={[[0, 0], [mapHeight, mapWidth]]}
         maxBoundsViscosity={1.0}
-        style={{ height: '100%', width: '100%', zIndex: '1' }}>
+        style={{ height: '100%', width: '100%', zIndex: '1' }}
+      >
+        {navigationMode ? (
+          <ImageOverlay
+            url={`/map/${floorImageUrl}`}
+            bounds={[[0, 0], [1640, 2360]]}
+            interactive={true}
+          />
+        ) : (
+          <ImageOverlay
+            url="/CDEmap.png"
+            bounds={[[0, 0], [mapHeight, mapWidth]]}
+            interactive={true}
+          />
+        )}
 
-        {/* base map  change when nav start*/}
-      {navigationMode ? (
-        <ImageOverlay
-          url={`/map/${floorImageUrl}`}
-          bounds={[[0, 0], [1640, 2360]]}
-          interactive={true}
-        />
-      ) : (
-        <ImageOverlay
-          url="/CDEmap.png"
-          bounds={[[0, 0], [mapHeight, mapWidth]]}
-          interactive={true}
-        />
-      )}
-
-        {/* Add Coordinates */}
         <Coordinates />
-              
+
         {!navigationMode && buildings.map(building => (
           <Marker
             key={building.id}
             position={[building.y, building.x]}
             icon={Icon(building.name)}
-            eventHandlers={{ click: () => setSelectedBuilding(building) }}
+            eventHandlers={{
+              click: () => setSelectedBuilding({ ...building })
+            }}
           />
         ))}
 
-        {navigationMode && nodes.map((node) => {
-           if (!node.position || node.position.length !== 2) return null;
-          return (
+        {navigationMode && nodes.map((node) => (
           <Marker
             key={node.id}
             position={node.position}
@@ -240,8 +240,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
           >
             <Popup>{node.name}</Popup>
           </Marker>
-          );
-        })}
+        ))}
 
         <FixedPopup building={selectedBuilding} position={popupPosition} />
       </MapContainer>
@@ -249,4 +248,4 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   );
 };
 
-export default MapComponent;    
+export default MapComponent;
