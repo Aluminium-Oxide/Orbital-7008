@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet';
@@ -60,12 +60,18 @@ const Icon = (name: string): L.DivIcon => {
   });
 };
 
-const nodeIcon = new L.Icon({
-  iconUrl: "/icons/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
+const NodeImageIcon = (imageUrl: string, zoom: number): L.DivIcon => {
+  const scale = Math.pow(2, zoom);
+  const baseSize = 1.6;
+  const size = baseSize * scale;
+
+  return L.divIcon({
+    className: 'custom-node-image',
+    html: `<img src="${imageUrl}" style="width:${size}px; height:${size}px;" />`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size],
+  });
+};
 
 const buildings: Building[] = [
   { id: 0, name: "EA", x: 356, y: 116 },
@@ -101,21 +107,32 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   const [nodes, setNodes] = useState<Node[]>([]);
   const [floorImageUrl, setFloorImageUrl] = useState<string>("");
   const [navigationMode, setNavigationMode] = useState(false);
-  const [levelKey, setLevelKey] = useState<string>("L1");
+  const [zoomLevel, setZoomLevel] = useState<number>(0);
 
   const mapWidth = 1707;
   const mapHeight = 1889;
-  const initialZoom = Math.min(
-    Math.log2(window.innerWidth / mapWidth),
-    Math.log2(window.innerHeight / mapHeight)
-  );
+  const floorMapWidth = 2360;
+  const floorMapHeight = 1640;
+
+  const initialZoom = useMemo(() => (
+    Math.min(
+      Math.log2(window.innerWidth / mapWidth),
+      Math.log2(window.innerHeight / mapHeight)
+    )
+  ), []);
+
+  const mapSize = navigationMode
+    ? { width: floorMapWidth, height: floorMapHeight }
+    : { width: mapWidth, height: mapHeight };
+
+  const dynamicCenter: [number, number] = [mapSize.height / 2, mapSize.width / 2];
+  const dynamicBounds: [[number, number], [number, number]] = [[0, 0], [mapSize.height, mapSize.width]];
 
   const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
 
   useEffect(() => {
     if (destination && destination.trim() !== '') {
       setNavigationMode(true);
-      setLevelKey('L1');
     } else {
       setNavigationMode(false);
       setNodes([]);
@@ -153,6 +170,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       })
       .catch((err) => console.error("Failed to load node data:", err));
   }, [navigationMode, destination, currentFloor]);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const map = mapRef.current;
+
+    const updateZoom = () => setZoomLevel(map.getZoom());
+    map.on('zoom', updateZoom);
+    updateZoom();
+
+    return () => {
+      map.off('zoom', updateZoom);
+    };
+  }, []);
 
   const FixedPopup = ({ building, position }: { building: Building | null; position: [number, number] }) => {
     const map = useMap();
@@ -197,18 +227,18 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       <MapContainer
         ref={mapRef}
         crs={PixelCRS}
-        center={[mapHeight / 2, mapWidth / 2]}
+        center={dynamicCenter}
         zoom={initialZoom}
         maxZoom={2}
         minZoom={initialZoom - 2}
-        maxBounds={[[0, 0], [mapHeight, mapWidth]]}
+        maxBounds={dynamicBounds}
         maxBoundsViscosity={1.0}
         style={{ height: '100%', width: '100%', zIndex: '1' }}
       >
         {navigationMode ? (
           <ImageOverlay
             url={`/map/${floorImageUrl}`}
-            bounds={[[0, 0], [1640, 2360]]}
+            bounds={[[0, 0], [floorMapHeight, floorMapWidth]]}
             interactive={true}
           />
         ) : (
@@ -236,7 +266,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
           <Marker
             key={node.id}
             position={node.position}
-            icon={nodeIcon}
+            icon={NodeImageIcon("/map/1.png", zoomLevel)}
           >
             <Popup>{node.name}</Popup>
           </Marker>
