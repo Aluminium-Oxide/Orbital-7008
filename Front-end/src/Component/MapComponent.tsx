@@ -23,11 +23,12 @@ const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
   infinite: true,
 });
 
-function Coordinates() {
+function Coordinates({ onMapClick }: { onMapClick?: () => void }) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
       console.log(lng, lat);
+      onMapClick?.();
     }
   });
   return null;
@@ -128,8 +129,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   const dynamicCenter: [number, number] = [mapSize.height / 2, mapSize.width / 2];
   const dynamicBounds: [[number, number], [number, number]] = [[0, 0], [mapSize.height, mapSize.width]];
 
-  const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
-
   useEffect(() => {
     setSelectedBuilding(null);
     if (mapRef.current) {
@@ -185,30 +184,26 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
     };
   }, []);
 
-  const FixedPopup = ({ building, position }: { building: Building | null; position: [number, number] }) => {
-    const map = useMap();
-
-    useEffect(() => {
-      if (building && !navigationMode) {
-        const popup = L.popup({ maxWidth: 500, className: 'popup-bottom' })
-          .setLatLng(position)
-          .setContent(`
-          <div class="text-center">
-            <h2 class="font-semibold mb-2">Block ${building.name}</h2>
-            <img src="/building-images/${building.name}.png" alt="${building.name}" class="max-w-full object-contain" />
-          </div>
-        `);
-        popup.openOn(map);
-      } else {
-        map.closePopup();
-      }
-    }, [building, map, position, navigationMode]);
-
-    return null;
-  };
-
   return (
     <div className="relative h-[90vh] w-full base-map-container">
+
+      {selectedBuilding && !navigationMode && (
+        <div className="absolute top-0 right-0 w-[300px] h-full bg-white shadow-lg z-[1000] p-4 overflow-y-auto">
+          <button
+            className="absolute top-2 right-2 text-gray-500 hover:text-black"
+            onClick={() => setSelectedBuilding(null)}
+          >
+            ✕
+          </button>
+          <h2 className="text-lg font-semibold mb-2">Block {selectedBuilding.name}</h2>
+          <img
+            src={`/building-images/${selectedBuilding.name}.png`}
+            alt={selectedBuilding.name}
+            className="w-full object-contain rounded"
+          />
+        </div>
+      )}
+
       {navigationMode && (
         <button
           onClick={() => {
@@ -250,7 +245,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
           />
         )}
 
-        <Coordinates />
+        <Coordinates onMapClick={() => setSelectedBuilding(null)} />
 
         {!navigationMode && buildings.map(building => (
           <Marker
@@ -272,8 +267,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
             <Popup>{node.name}</Popup>
           </Marker>
         ))}
-
-        <FixedPopup building={selectedBuilding} position={popupPosition} />
       </MapContainer>
     </div>
   );
