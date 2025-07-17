@@ -147,8 +147,22 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
     if (!navigationMode || !destination) return;
 
     const floorImageName = `${destination}.png`;
-    console.log("加载楼层图:", floorImageName);
-    setFloorImageUrl(floorImageName);
+    const floorImagePath = `/map/${floorImageName}`;
+    const fallbackImagePath = `/map/no.png`;
+
+    const checkImage = (src: string): Promise<string> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(src);
+        img.onerror = () => resolve(fallbackImagePath);
+        img.src = src;
+      });
+    };
+
+    checkImage(floorImagePath).then(validPath => {
+      console.log("加载楼层图:", validPath);
+      setFloorImageUrl(validPath.replace('/map/', ''));
+    });
 
     fetch(`http://localhost:3001/api/buildings/${destination}`)
       .then((res) => res.json())
