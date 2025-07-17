@@ -146,18 +146,18 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   useEffect(() => {
     if (!navigationMode || !destination) return;
 
+    const floorImageName = `${destination}.png`;
+    console.log("加载楼层图:", floorImageName);
+    setFloorImageUrl(floorImageName);
+
     fetch(`http://localhost:3001/api/buildings/${destination}`)
       .then((res) => res.json())
       .then((data) => {
         const levelData = data.levels[currentFloor];
         if (!levelData) {
-          console.error(`Level ${currentFloor} not found`);
+          console.error(`Level ${currentFloor} not found in ${destination}`);
           return;
         }
-
-        const imageUrl = `${destination}${currentFloor}.png`;
-        console.log("加载楼层图:", imageUrl);
-        setFloorImageUrl(imageUrl);
 
         const processedNodes: Node[] = levelData.nodes
           .filter((n: any) => n.x != null && n.y != null)
@@ -186,7 +186,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
 
   return (
     <div className="relative h-[90vh] w-full base-map-container">
-
       {selectedBuilding && !navigationMode && (
         <div className="absolute top-0 right-0 w-[300px] h-full bg-white shadow-lg z-[1000] p-4 overflow-y-auto">
           <button
