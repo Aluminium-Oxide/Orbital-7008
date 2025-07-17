@@ -131,15 +131,16 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   const popupPosition: [number, number] = [mapHeight / 0.8, mapWidth / 2];
 
   useEffect(() => {
+    setSelectedBuilding(null);
+    if (mapRef.current) {
+      mapRef.current.closePopup();
+    }
+
     if (destination && destination.trim() !== '') {
       setNavigationMode(true);
     } else {
       setNavigationMode(false);
       setNodes([]);
-      setSelectedBuilding(null);
-      if (mapRef.current) {
-        mapRef.current.closePopup();
-      }
     }
   }, [destination]);
 
@@ -188,7 +189,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
     const map = useMap();
 
     useEffect(() => {
-      if (building) {
+      if (building && !navigationMode) {
         const popup = L.popup({ maxWidth: 500, className: 'popup-bottom' })
           .setLatLng(position)
           .setContent(`
@@ -201,7 +202,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       } else {
         map.closePopup();
       }
-    }, [building, map, position]);
+    }, [building, map, position, navigationMode]);
 
     return null;
   };
