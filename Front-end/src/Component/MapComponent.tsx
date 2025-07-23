@@ -179,7 +179,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
             ...n,
             position: [n.y, n.x] as [number, number],
           }));
-
         setNodes(processedNodes);
       })
       .catch((err) => console.error("Failed to load node data:", err));
@@ -201,7 +200,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   return (
     <div className="relative h-[90vh] w-full base-map-container">
       {selectedBuilding && !navigationMode && (
-        <div className="absolute top-0 right-0 w-[300px] h-full bg-white shadow-lg z-[1000] p-4 overflow-y-auto">
+      <div className="absolute top-0 right-0 h-full w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
           <button
             className="absolute top-2 right-2 text-gray-500 hover:text-black"
             onClick={() => setSelectedBuilding(null)}
