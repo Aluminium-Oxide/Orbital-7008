@@ -68,7 +68,7 @@ const NodeImageIcon = (imageUrl: string, zoom: number): L.DivIcon => {
 
   return L.divIcon({
     className: 'custom-node-image',
-    html: `<img src="${imageUrl}" style="width:${size}px; height:${size}px;" />`,
+    html: `<img src="${imageUrl}" style="width:${size}px; height:${size}px; user-select:none;" draggable="false" />`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size],
   });
@@ -200,7 +200,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
   return (
     <div className="relative h-[90vh] w-full base-map-container">
       {selectedBuilding && !navigationMode && (
-      <div className="absolute top-0 right-0 h-full w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
+        <div className="absolute top-0 right-0 h-full w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
           <button
             className="absolute top-2 right-2 text-gray-500 hover:text-black"
             onClick={() => setSelectedBuilding(null)}
@@ -212,6 +212,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
             src={`/building-images/${selectedBuilding.name}.png`}
             alt={selectedBuilding.name}
             className="w-full object-contain rounded"
+            draggable="false"
           />
         </div>
       )}
