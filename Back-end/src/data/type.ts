@@ -1,16 +1,21 @@
-interface Node {
+export interface Node {
   id: string;
   x: number;
   y: number;
 }
 
-interface Edge {
+export interface LinkNode extends Node{
+  building: string;
+  level: string;
+}
+
+export interface Edge {
   from: string;
   to: string;
   distance: number;
 }
 
-export interface levels {
+export interface Level{
   image: string;
   bounds: [[number, number], [number, number]];
   nodes: Node[];
@@ -20,5 +25,11 @@ export interface levels {
 export interface Building {
   name: string;
   floors: number;
-  levels:Record<string, levels>
+  levels: Record<string, Level>;
+}
+
+export interface InterlinkEdge {
+  from: string;
+  to: string;
+  weight: number;
 }

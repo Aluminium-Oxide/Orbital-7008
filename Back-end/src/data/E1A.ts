@@ -100,10 +100,13 @@ export const E1A: Building = {
             image: "/E1AL4.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes: [
+                {id: "E1A-04-node5", x: 192, y: 977},
                 {id: "E1A-04-lift2", x: 446, y: 877},
                 {id: "E1A-04-lift1", x: 530, y: 977},
                 {id: "E1A-04-01", x: 530, y: 746},
                 {id: "E1A-04-node1", x: 530, y: 427},
+                {id: "E1A-04-node3", x: 712, y: 427},
+                {id: "E1A-04-node4", x: 712, y: 64},
                 {id: "E1A-04-02", x: 1152, y: 427},
                 {id: "E1A-04-03", x: 1537, y: 427},
                 {id: "E1A-04-node2", x: 2123, y: 427},
@@ -122,6 +125,9 @@ export const E1A: Building = {
                 {from: "E1A-04-lift1", to: "E1A-06-lift1", distance: 0},
                 {from: "E1A-04-lift1", to: "E1A-07-lift1", distance: 0},
                 //forwards
+                {from: "E1A-04-node5", to: "E1A-04-lift1", distance: 367},
+                {from: "E1A-04-node1", to: "E1A-04-node3", distance: 182},
+                {from: "E1A-04-node3", to: "E1A-04-node4", distance: 363},
                 {from: "E1A-04-lift2", to: "E1A-04-lift1", distance: 130},
                 {from: "E1A-04-lift1", to: "E1A-04-01", distance: 231},
                 {from: "E1A-04-01", to: "E1A-04-node1", distance: 319},
@@ -129,6 +135,9 @@ export const E1A: Building = {
                 {from: "E1A-04-02", to: "E1A-04-03", distance: 385},
                 {from: "E1A-04-03", to: "E1A-04-node2", distance: 586},
                 //backwards
+                {from: "E1A-04-lift1", to: "E1A-04-node5", distance: 367},
+                {from: "E1A-04-node3", to: "E1A-04-node1", distance: 182},
+                {from: "E1A-04-node4", to: "E1A-04-node3", distance: 363},
                 {from: "E1A-04-node2", to: "E1A-04-03", distance: 586},
                 {from: "E1A-04-03", to: "E1A-04-02", distance: 385},
                 {from: "E1A-04-02", to: "E1A-04-node1", distance: 622},
