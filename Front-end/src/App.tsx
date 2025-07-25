@@ -20,7 +20,7 @@ function App() {
     <header className="fixed top-0 left-0 right-0 bg-blue-800 shadow-md z-50">
       <div className="container mx-auto px-5 py-0">
         {/* title */}
-        <div className="flex justify-left py-3 px-6">
+        <div className="flex justify-left py-3 px-4">
         <h1 className="text-xl font-bold text-white">CDE Map</h1>
         </div>
       </div>
@@ -33,14 +33,17 @@ function App() {
           Destination:
         </label>
         <input
-          className="flex-1 ml-5 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
+          className="flex-1 mx-4 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"
+          id="destination-input"
           value={destination}
           type = "text"
-          onChange={(e) => setDestination(e.target.value)}>
-        </input>
+          placeholder="Enter location"
+          onChange={(e) => setDestination(e.target.value)}/>
         <button
           onClick={handleSearch}
-          className="w-15 mr-5 ml-5 bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg transition-colors touch-manipulation active:scale-95">
+          className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg transition active:scale-95"
+          aria-label="Search"
+        >
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
