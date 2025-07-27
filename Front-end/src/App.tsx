@@ -278,7 +278,7 @@ return (
           />
 
           {segments.length > 0 && (
-            <div className="absolute top-4 left-4 right-4 z-30 flex justify-between items-center">
+            <div className="absolute top-4 left-4 right-4 z-30 flex justify-end items-center space-x-3">
               <button
                 className="bg-blue-400 text-white px-3 py-1 rounded"
                 onClick={() => setCurrentSegmentIdx(prev => Math.max(prev - 1, 0))}

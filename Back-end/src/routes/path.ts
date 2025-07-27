@@ -148,25 +148,25 @@ function getAllNodesAndEdges() {
 router.post('/', (req: Request, res: Response): void => {
   const { from, to } = req.body;
   if (!from || !to) {
-    res.status(400).json({ error: '缺少必要参数: from, to' });
+    res.status(400).json({ error: 'important parameter lacking: from, to' });
     return;
   }
   const { allNodes, allEdges } = getAllNodesAndEdges();
   if (!allNodes.includes(from)) {
-    res.status(400).json({ error: `起点 '${from}' 不存在`, availableNodes: allNodes });
+    res.status(400).json({ error: `starting point '${from}' not found`, availableNodes: allNodes });
     return;
   }
   if (!allNodes.includes(to)) {
-    res.status(400).json({ error: `终点 '${to}' 不存在`, availableNodes: allNodes });
+    res.status(400).json({ error: `destination '${to}' not found`, availableNodes: allNodes });
     return;
   }
   const result = dijkstra(allNodes, allEdges, from, to);
   if (!result) {
-    res.status(400).json({ error: '无法找到从起点到终点的路径', from, to });
+    res.status(400).json({ error: ' gg no path found', from, to });
     return;
   }
   
-  console.log('路径规划结果:', {
+  console.log('route planning result:', {
     from,
     to,
     path: result.path,
@@ -183,7 +183,7 @@ router.get('/nodes/:building', (req: Request, res: Response): void => {
 
   if (!buildingData[building.toUpperCase()]) {
     res.status(404).json({ 
-      error: '建筑不存在',
+      error: 'building not found',
       availableBuildings: Object.keys(buildingData)
     });
     return;
@@ -225,11 +225,11 @@ router.get('/debug/:from/:to', (req: Request, res: Response): void => {
   const { allNodes, allEdges } = getAllNodesAndEdges();
   
   if (!allNodes.includes(from)) {
-    res.status(400).json({ error: `起点 '${from}' 不存在`, availableNodes: allNodes });
+    res.status(400).json({ error: `start point '${from}' not found`, availableNodes: allNodes });
     return;
   }
   if (!allNodes.includes(to)) {
-    res.status(400).json({ error: `终点 '${to}' 不存在`, availableNodes: allNodes });
+    res.status(400).json({ error: `destination '${to}' not found`, availableNodes: allNodes });
     return;
   }
   

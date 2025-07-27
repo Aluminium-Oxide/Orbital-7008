@@ -27,7 +27,7 @@ function Coordinates({ onMapClick }: { onMapClick?: (coordinates: {x: number, y:
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
-      console.log('点击坐标:', lng, lat);
+      console.log('coordinate clicked:', lng, lat);
       onMapClick?.({x: lng, y: lat});
     }
   });
