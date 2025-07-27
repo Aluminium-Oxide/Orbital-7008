@@ -4,13 +4,13 @@ export const E2A: Building = {
      name: "E2",
     floors: 7,
     levels:{
-    "L1":{
+    "01":{
         image: "/E2AL1.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[],
         edges:[]
     },
-    "L2":{
+    "02":{
         image: "/E2AL2.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[
@@ -47,8 +47,8 @@ export const E2A: Building = {
             {from: "E2A-02-node1", to: "E2A-02-node2", distance: 321},
             {from: "E2A-02-node1", to: "E2A-02-lift1", distance: 242}
         ]},
-    "L3": {
-         image: "/E2AL3.png",
+        "03": {
+        image: "/E2AL3.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[
             {id: "E2A-03-lift1", x: 1618, y: 867},
@@ -77,7 +77,7 @@ export const E2A: Building = {
             {from: "E2A-03-03", to: "E2A-03-node1", distance: 214},
             {from: "E2A-03-node1", to: "E2A-03-lift1", distance: 242}
         ]},
-    "L4":{
+    "04":{
         image: "/E2AL4.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[

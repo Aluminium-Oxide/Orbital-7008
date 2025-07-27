@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet';
+import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap, Polyline } from 'react-leaflet';
 
 // Pixel CRS config
 const PixelProjection = {
@@ -23,12 +23,12 @@ const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
   infinite: true,
 });
 
-function Coordinates({ onMapClick }: { onMapClick?: () => void }) {
+function Coordinates({ onMapClick }: { onMapClick?: (coordinates: {x: number, y: number}) => void }) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
-      console.log(lng, lat);
-      onMapClick?.();
+      console.log('点击坐标:', lng, lat);
+      onMapClick?.({x: lng, y: lat});
     }
   });
   return null;
@@ -74,6 +74,13 @@ const NodeImageIcon = (imageUrl: string, zoom: number): L.DivIcon => {
   });
 };
 
+const highlightIcon = L.divIcon({
+  className: 'highlight-node',
+  html: `<div style="background:#ff0;border:2px solid #f00;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;"><span style='color:#f00;font-weight:bold;'>★</span></div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 24],
+});
+
 const buildings: Building[] = [
   { id: 0, name: "EA", x: 356, y: 116 },
   { id: 1, name: "E1", x: 520, y: 900 },
@@ -100,15 +107,19 @@ const buildings: Building[] = [
 interface MapComponentProps {
   destination: string;
   currentFloor: string;
+  path?: string[];
+  highlightNode?: string | null;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, path, highlightNode }) => {
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
-  const [floorImageUrl, setFloorImageUrl] = useState<string>("");
+
   const [navigationMode, setNavigationMode] = useState(false);
   const [zoomLevel, setZoomLevel] = useState<number>(0);
+  const [clickedCoordinates, setClickedCoordinates] = useState<{x: number, y: number} | null>(null);
+  const [currentLevelData, setCurrentLevelData] = useState<any>(null);
 
   const mapWidth = 1707;
   const mapHeight = 1889;
@@ -135,18 +146,18 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       mapRef.current.closePopup();
     }
 
-    if (destination && destination.trim() !== '') {
+    if (destination && destination.trim() !== '' && currentFloor && currentFloor.trim() !== '') {
       setNavigationMode(true);
     } else {
       setNavigationMode(false);
       setNodes([]);
     }
-  }, [destination]);
+  }, [destination, currentFloor]);
 
   useEffect(() => {
-    if (!navigationMode || !destination) return;
+    if (!navigationMode || !destination || !currentFloor) return;
 
-    const floorImageName = `${destination}.png`;
+    const floorImageName = `${destination}${currentFloor}.png`;
     const floorImagePath = `/map/${floorImageName}`;
     const fallbackImagePath = `/map/no.png`;
 
@@ -161,27 +172,45 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
 
     checkImage(floorImagePath).then(validPath => {
       console.log("加载楼层图:", validPath);
-      setFloorImageUrl(validPath.replace('/map/', ''));
     });
 
-    fetch(`http://localhost:3001/api/buildings/${destination}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const levelData = data.levels[currentFloor];
-        if (!levelData) {
-          console.error(`Level ${currentFloor} not found in ${destination}`);
-          return;
-        }
-
-        const processedNodes: Node[] = levelData.nodes
-          .filter((n: any) => n.x != null && n.y != null)
-          .map((n: any) => ({
-            ...n,
-            position: [n.y, n.x] as [number, number],
-          }));
-        setNodes(processedNodes);
-      })
-      .catch((err) => console.error("Failed to load node data:", err));
+    import('../services/buildingService').then(({ BuildingService }) => {
+      BuildingService.getBuilding(destination)
+        .then((data) => {
+          if (!data) {
+            console.error(`Building ${destination} not found`);
+            setNodes([]);
+            return;
+          }
+          const levelData = data.levels[currentFloor];
+          if (!levelData) {
+            console.error(`Level ${currentFloor} not found in ${destination}`);
+            setNodes([]);
+            setCurrentLevelData(null);
+            return;
+          }
+          setCurrentLevelData(levelData);
+          console.log('level data:', levelData);
+          console.log('level bounds:', levelData.bounds);
+          console.log('coord transfer eg:');
+          if (levelData.nodes.length > 0) {
+            const sampleNode = levelData.nodes[0];
+            console.log(`original cooordinate: x=${sampleNode.x}, y=${sampleNode.y}`);
+            console.log(`coor after transfer: [${sampleNode.y}, ${sampleNode.x}]`);
+          }
+          const processedNodes: Node[] = levelData.nodes
+            .filter((n: any) => n.x != null && n.y != null)
+            .map((n: any) => ({
+              ...n,
+              position: [n.y, n.x] as [number, number],
+            }));
+          setNodes(processedNodes);
+        })
+        .catch((err) => {
+          setNodes([]);
+          console.error("Failed to load node data:", err);
+        });
+    });
   }, [navigationMode, destination, currentFloor]);
 
   useEffect(() => {
@@ -197,8 +226,33 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
     };
   }, []);
 
+  const floorImageUrl = `/map/${destination}${currentFloor}.png`;
+  console.log('MapComponent props:', { destination, currentFloor, floorImageUrl });
+
   return (
     <div className="relative h-[90vh] w-full base-map-container">
+      {navigationMode && clickedCoordinates && (
+        <div className="absolute top-4 right-4 bg-black bg-opacity-90 text-white px-3 py-2 rounded-lg z-[9999] font-mono text-sm shadow-lg border border-gray-600">
+          <div className="font-bold mb-1">点击坐标</div>
+          <div>X: {Math.round(clickedCoordinates.x)}</div>
+          <div>Y: {Math.round(clickedCoordinates.y)}</div>
+          <div className="text-xs text-gray-300 mt-1">
+            <div>Leaflet格式: [{Math.round(clickedCoordinates.y)}, {Math.round(clickedCoordinates.x)}]</div>
+          </div>
+          {currentLevelData && (
+            <div className="mt-2 text-xs text-gray-300">
+              <div>Bounds: {JSON.stringify(currentLevelData.bounds)}</div>
+            </div>
+          )}
+          <button 
+            onClick={() => setClickedCoordinates(null)}
+            className="mt-2 text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded"
+          >
+            清除
+          </button>
+        </div>
+      )}
+      
       {selectedBuilding && !navigationMode && (
         <div className="absolute top-0 right-0 h-full w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
           <button
@@ -218,19 +272,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       )}
 
       {navigationMode && (
-        <button
-          onClick={() => {
-            setNavigationMode(false);
-            setNodes([]);
-            setSelectedBuilding(null);
-            if (mapRef.current) {
-              mapRef.current.closePopup();
-            }
-          }}
-          className="absolute top-4 right-4 z-[1000] bg-blue-500 text-white px-3 py-2 rounded"
-        >
-          Back
-        </button>
+        null
       )}
 
       <MapContainer
@@ -246,8 +288,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
       >
         {navigationMode ? (
           <ImageOverlay
-            url={`/map/${floorImageUrl}`}
-            bounds={[[0, 0], [floorMapHeight, floorMapWidth]]}
+            key={floorImageUrl}
+            url={floorImageUrl}
+            bounds={currentLevelData?.bounds ? 
+              [[currentLevelData.bounds[0][0], currentLevelData.bounds[0][1]], 
+               [currentLevelData.bounds[1][0], currentLevelData.bounds[1][1]]] : 
+              [[0, 0], [floorMapHeight, floorMapWidth]]}
             interactive={true}
           />
         ) : (
@@ -258,7 +304,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
           />
         )}
 
-        <Coordinates onMapClick={() => setSelectedBuilding(null)} />
+        <Coordinates onMapClick={(coordinates) => {
+          if (navigationMode) {
+            setClickedCoordinates(coordinates);
+          }
+          setSelectedBuilding(null);
+        }} />
 
         {!navigationMode && buildings.map(building => (
           <Marker
@@ -275,11 +326,23 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor }
           <Marker
             key={node.id}
             position={node.position}
-            icon={NodeImageIcon("/map/1.png", zoomLevel)}
+            icon={highlightNode === node.id ? highlightIcon : NodeImageIcon("/map/1.png", zoomLevel)}
           >
             <Popup>{node.name}</Popup>
           </Marker>
         ))}
+
+        {navigationMode && path && path.length > 1 && (
+          <Polyline
+            positions={
+              path
+                .map(id => nodes.find(n => n.id === id))
+                .filter(Boolean)
+                .map(n => n!.position)
+            }
+            pathOptions={{ color: 'red', weight: 5 }}
+          />
+        )}
       </MapContainer>
     </div>
   );

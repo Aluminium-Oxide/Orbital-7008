@@ -5,16 +5,18 @@ export const EA: Building = {
     floors: 7,
     levels: {
       //l1done
-      "L1": {
-        image: "/EAL1.png",
-        bounds: [[0, 0], [990, 1424]],
+      "01": {
+        image: "/EA01.png",
+        bounds: [[0, 0], [1640, 2360]],
         nodes: [
-          {id: "EA-01-lift1", x: 886, y: 270}, 
-          {id: "EA-04-05", x: 768, y: 270},
-          {id: "EA-01-liftdoor", x: 938,y:306},
-          {id: "EA", x: 1048, y: 306},
-          {id: "LT7A", x: 1048, y: 526},
-          {id: "EA-01-lift2", x: 886, y: 567},],  
+          {id: "EA-01-lift1", x: 1464, y: 440}, 
+          {id: "EA-01-lift2", x: 1468, y: 943},
+          {id: "EA-01-05", x: 1264, y: 452},
+          {id: "EA-01-door", x: 1552,y:488},
+          {id: "Engineering Auditorium", x: 1740, y: 512},
+          {id: "LT7A", x: 1736, y: 871},
+          {id: "EA-01-", x: 1468, y: 943},
+        ],  
         edges: [
           //lifts
           {from: "EA-01-lift1", to: "EA-02-lift1", distance: 0},
@@ -31,18 +33,18 @@ export const EA: Building = {
           {from: "EA-01-lift2", to: "EA-07-lift2", distance: 0},
           //forwards
           {from: "EA-01-lift1", to: "EA-04-05", distance: 118},
-          {from: "EA-01-lift1", to: "EA-01-liftdoor", distance: 63},
-          {from: "EA-01-liftdoor", to: "EA", distance: 110},
+          {from: "EA-01-lift1", to: "EA-01-door", distance: 63},
+          {from: "EA-01-door", to: "EA", distance: 110},
           {from: "EA", to: "LT7", distance: 220},
           {from: "LT7A", to: "EA-01-lift2", distance: 167},
           //backwards
           {from: "EA-01-lift2", to: "LT7A", distance: 167},
           {from: "LT7A", to: "EA", distance: 220},
-          {from: "EA", to: "EA-01-liftdoor", distance: 110},
-          {from: "EA-01-liftdoor", to: "EA-01-lift1", distance: 63},
+          {from: "EA", to: "EA-01-door", distance: 110},
+          {from: "EA-01-door", to: "EA-01-lift1", distance: 63},
           {from: "EA-04-05", to: "EA-01-lift1", distance: 118},]},
       
-      "L2": {
+      "02": {
         image: "/EAL2.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -98,7 +100,7 @@ export const EA: Building = {
           { from: "EA-02-node1", to: "EA-02-lift1", distance: 216 },]},
 
       //l3done
-      "L3": {
+      "03": {
         image: "/EAL3.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[
@@ -162,7 +164,7 @@ export const EA: Building = {
         { from: "EA-03-05", to: "EA-03-04", distance: 59 },
         { from: "EA-03-04", to: "EA-03-02", distance: 0 }]},
              
-      "L4": {
+      "04": {
         image: "/EAL4.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[
@@ -222,7 +224,7 @@ export const EA: Building = {
           {from: "EA-04-04", to: "EA-04-node1", distance: 491}, ]  
       },
 
-      "L5": {
+      "05": {
         image: "/EAL5.png",
         bounds: [[0, 0], [990, 1424]],
         nodes:[
@@ -373,7 +375,7 @@ export const EA: Building = {
         ]
       },
 
-      "L6": {
+      "06": {
         image: "/EAL6.png",
         bounds: [[0, 0], [990, 1424]],
         nodes: [
@@ -458,7 +460,7 @@ export const EA: Building = {
         ]
       },
 
-      "L7": {
+      "07": {
         image: "/EAL7.png",
         bounds: [[0, 0], [990, 1424]],
         nodes: [

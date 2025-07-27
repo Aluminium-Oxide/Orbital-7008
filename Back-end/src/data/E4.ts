@@ -4,12 +4,12 @@ export const E4: Building = {
     name: "EA",
     floors: 7,
     levels: {
-        "L1":{
+        "01":{
         image: "/E4L1.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [],
         edges:[]},
-        "L2":{
+        "02":{
         image: "/E4L2.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -43,7 +43,7 @@ export const E4: Building = {
     {from: "E4-02-02", to: "E4-02-01", distance: 187},
     {from: "E4-02-01", to: "E4-02-lift1", distance: 54}
         ]},
-        "L3":{
+        "03":{
         image: "/E4L3.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -86,7 +86,7 @@ export const E4: Building = {
     {from: "E4-03-03", to: "E4-03-node1", distance: 103},
     {from: "E4-03-node1", to: "E4-03-lift1", distance: 62}
         ]},
-        "L4":{
+        "04":{
         image: "/E3L4.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -129,7 +129,7 @@ export const E4: Building = {
     {from: "E4-04-node2", to: "LT6", distance: 91},
     {from: "LT6", to: "E4-04-node1", distance: 531}
         ]},
-        "L5":{        
+            "05":{
         image: "/E4L5.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -161,7 +161,7 @@ export const E4: Building = {
     {from: "E4-05-40", to: "E4-05-node1", distance: 135},
     {from: "E4-05-node1", to: "E4-05-lift1", distance: 127}
         ]},
-        "L6":{        
+            "06":{
         image: "/E4L6.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -245,7 +245,7 @@ export const E4: Building = {
     {from: "E4-06-12", to: "E4-06-node2", distance: 383},
     {from: "E4-06-node2", to: "E4-06-12", distance: 383}  
         ]},
-        "L7":{        
+            "07":{
         image: "/E4L7.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -299,7 +299,7 @@ export const E4: Building = {
     {from: "E4-06-09", to: "E4-06-10", distance: 62},
     {from: "E4-06-10", to: "E4-07-lift1", distance: 67}
         ]},
-        "L8":{        
+            "08":{
         image: "/E4L8.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [

@@ -35,8 +35,8 @@ export const E2: Building = {
                 { from: "E2-B1-03", to: "E2-B1-02", distance: 164 },
                 { from: "E2-B1-02", to: "E2-B1-01", distance: 333 },
                 { from: "E2-B1-01", to: "E2-B1-lift2", distance: 108 }]},
-        "L1":{
-            image: "/E2L1.png",
+            "01":{
+        image: "/E2L1.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
                 {id: "E2-01-lift1", x: 511, y: 129},
@@ -103,8 +103,8 @@ export const E2: Building = {
                 {from: "E2-01-node3", to: "E2-01-node2", distance: 221},
                 {from: "E2-01-node2", to: "E2-01-node1", distance: 446},
                 {from: "E2-01-node1", to: "E2-01-lift1", distance: 70}]},
-        "L2":{
-            image: "/E2L2.png",
+            "02":{
+        image: "/E202.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
                 {id: "E2-02-lift1", x: 511, y: 129},
@@ -212,8 +212,8 @@ export const E2: Building = {
                 {from: "E2-02-39", to: "E2-02-38", distance: 0},
                 {from: "E2-02-38", to: "E2-02-node1", distance: 347},
                 {from: "E2-02-node1", to: "E2-02-lift1", distance: 70}]},
-        "L3":{
-            image: "/E2L3.png",
+            "03":{
+        image: "/E2L3.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
                 {id: "E2-03-lift1", x: 511, y: 129},
@@ -324,8 +324,8 @@ export const E2: Building = {
                 {from: "E2-03-03", to: "E2-03-02", distance: 0},
                 {from: "E2-03-02", to: "E2-03-node1", distance: 419},
                 {from: "E2-03-node1", to: "E2-03-lift1", distance: 70}]},
-        "L4":{
-            image: "/E2L4.png",
+            "04":{
+        image: "/E204.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
                 {id: "E2-04-lift3", x: 1866, y: 815},
@@ -381,8 +381,8 @@ export const E2: Building = {
                 {from: "E2-04-01", to: "E2-04-09", distance: 136},
                 {from: "E2-04-09", to: "E2-04-13", distance: 100},
                 {from: "E2-04-13", to: "E2-04-lift3", distance: 276}]},
-        "L5":{
-            image: "/E2L5.png",
+            "05":{
+        image: "/E205.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
                 {id: "E2-05-lift1", x: 1340,y:299},

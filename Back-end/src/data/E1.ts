@@ -3,7 +3,7 @@ export const E1: Building = {
     name: "E1",
     floors: 8,
     levels:{
-     "L1":{
+     "01":{
         image: "/E1L1.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -11,7 +11,7 @@ export const E1: Building = {
         edges: [
         ]},
 
-     "L2":{
+     "02":{
         image: "/E1L2.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -27,12 +27,12 @@ export const E1: Building = {
         ],
         edges: [
         //lifts
-            {from: "E1-02-lift1", to:"E1-03-lift1", distance:0},
-            {from: "E1-02-lift1", to:"E1-04-lift1", distance:0},
-            {from: "E1-02-lift1", to:"E1-05-lift1", distance:0},
-            {from: "E1-02-lift1", to:"E1-06-lift1", distance:0},
-            {from: "E1-02-lift1", to:"E1-07-lift1", distance:0},
-            {from: "E1-02-lift1", to:"E1-08-lift1", distance:0},
+            {from: "E1-02-lift1", to:"E1-03-lift1", distance:10},
+            {from: "E1-02-lift1", to:"E1-04-lift1", distance:10},
+            {from: "E1-02-lift1", to:"E1-05-lift1", distance:10},
+            {from: "E1-02-lift1", to:"E1-06-lift1", distance:10},
+            {from: "E1-02-lift1", to:"E1-07-lift1", distance:10},
+            {from: "E1-02-lift1", to:"E1-08-lift1", distance:10},
         //forward
             {from: "E1-02-lift1", to: "E1-02-node1", distance: 54},
             {from: "E1-02-node1", to: "E1-02-node2", distance: 117},
@@ -51,7 +51,7 @@ export const E1: Building = {
             {from: "E1-02-node3", to: "E1-02-node2", distance: 313},
             {from: "E1-02-node2", to: "E1-02-node1", distance: 117},
             {from: "E1-02-node1", to: "E1-02-lift1", distance: 54},]},
-    "L3":{
+    "03":{
         image: "/E1L3.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -70,12 +70,12 @@ export const E1: Building = {
         ],
         edges: [
         //lift
-            {from: "E1-03-lift1", to:"E1-02-lift1", distance:0},
-            {from: "E1-03-lift1", to:"E1-04-lift1", distance:0},
-            {from: "E1-03-lift1", to:"E1-05-lift1", distance:0},
-            {from: "E1-03-lift1", to:"E1-06-lift1", distance:0},
-            {from: "E1-03-lift1", to:"E1-07-lift1", distance:0},
-            {from: "E1-03-lift1", to:"E1-08-lift1", distance:0},
+            {from: "E1-03-lift1", to:"E1-02-lift1", distance:10},
+            {from: "E1-03-lift1", to:"E1-04-lift1", distance:10},
+            {from: "E1-03-lift1", to:"E1-05-lift1", distance:10},
+            {from: "E1-03-lift1", to:"E1-06-lift1", distance:10},
+            {from: "E1-03-lift1", to:"E1-07-lift1", distance:10},
+            {from: "E1-03-lift1", to:"E1-08-lift1", distance:10},
         //forward
             {from: "E1-03-lift1", to: "E1-03-node1", distance: 54},
             {from: "E1-03-node1", to: "E1-03-node2", distance: 117},
@@ -100,7 +100,7 @@ export const E1: Building = {
             {from: "E1-03-node2", to: "E1-03-node1", distance: 117},
             {from: "E1-03-node1", to: "E1-03-lift1", distance: 54},
             {from: "E1-03-node2", to: "E1-03-node5", distance: 573}]},
-    "L4":{
+    "04":{
         image: "/E1L4.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -137,7 +137,7 @@ export const E1: Building = {
             {from: "E1-04-node2", to: "E1-04-01", distance: 507},
             {from: "E1-04-01", to: "E1-04-node1", distance: 314},
             {from: "E1-04-node1", to: "E1-04-lift1", distance: 54}]},
-    "L5":{
+    "05":{
         image: "/E1L5.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -228,7 +228,7 @@ export const E1: Building = {
         {from: "E1-05-16", to: "E1-05-node2", distance: 66},
         {from: "E1-05-node2", to: "E1-05-node1", distance: 370},
         {from: "E1-05-node1", to: "E1-05-lift1", distance: 68}]},
-    "L6":{
+    "06":{
         image: "/E1L6.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -303,7 +303,7 @@ export const E1: Building = {
         {from: "E1-06-node2", to: "E1-06-01", distance: 49},
         {from: "E1-06-01", to: "E1-06-node1", distance: 327},
         {from: "E1-06-node1", to: "E1-06-lift1", distance: 54}]},
-    "L7":{
+    "07":{
         image: "/E1L7.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
@@ -407,7 +407,7 @@ export const E1: Building = {
         {from: "E1-07-26", to: "E1-07-27", distance: 91},
         {from: "E1-07-27", to: "E1-07-node1", distance: 281},
         {from: "E1-07-node1", to: "E1-07-lift1", distance: 54}]},
-    "L8":{
+    "08":{
         image: "/E1L8.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [

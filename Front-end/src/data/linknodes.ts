@@ -1,0 +1,18 @@
+export const LINK_NODE_IDS = [
+  "E1-04-node5",
+  "E1A-04-node2",
+  "E1-04-node3",
+  "E4-04-node2",
+  "E1A-04-node5",
+  "EA-07-node6",
+  "E2-B1-node1",
+  "E1-04-node4",
+  "E2-B1-node2",
+  "E1A-04-node4",
+  "E2-03-node3",
+  "E2A-02-node2",
+  "E3-06-node2",
+  "E4-04-node1",
+  "E3-06-node3",
+  "E2-B1-node4"
+]; 

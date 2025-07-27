@@ -1,30 +1,17 @@
 import { Router, Request, Response } from 'express';
+import { buildingData } from '../data/data';
+import { linkNodes, interlinkEdges } from '../data/linknodes';
 
 const router = Router();
 
-// 定义请求体的类型
 interface PathRequestBody {
   building: string;
+  level?: string;
   from: string;
   to: string;
 }
 
-// 示例建筑图数据
-const buildingGraphs: Record<string, {
-  nodes: string[];
-  edges: { from: string; to: string; distance: number }[];
-}> = {
-  tlab: {
-    nodes: ["A1", "A2", "A3"],
-    edges: [
-      { from: "A1", to: "A2", distance: 40 },
-      { from: "A2", to: "A3", distance: 40 },
-      { from: "A1", to: "A3", distance: 100 }  // 多路径，测试最短路径
-    ]
-  }
-};
-
-// 最短路径算法Z
+// Dijkstra
 function dijkstra(
   nodes: string[],
   edges: { from: string; to: string; distance: number }[],
@@ -35,16 +22,23 @@ function dijkstra(
   const previous: Record<string, string | null> = {};
   const unvisited = new Set(nodes);
 
-  // 初始化所有节点
   for (const node of nodes) {
     distances[node] = node === start ? 0 : Infinity;
     previous[node] = null;
   }
 
   while (unvisited.size > 0) {
-    const current = [...unvisited].reduce((a, b) =>
-      distances[a] < distances[b] ? a : b
-    );
+    let current = '';
+    let minDistance = Infinity;
+    for (const node of unvisited) {
+      if (distances[node] < minDistance) {
+        minDistance = distances[node];
+        current = node;
+      }
+    }
+
+    if (current === '' || minDistance === Infinity) break;
+    
     unvisited.delete(current);
 
     if (current === end) break;
@@ -57,6 +51,13 @@ function dijkstra(
           previous[edge.to] = current;
         }
       }
+      if (edge.to === current && unvisited.has(edge.from)) {
+        const alt = distances[current] + edge.distance;
+        if (alt < distances[edge.from]) {
+          distances[edge.from] = alt;
+          previous[edge.from] = current;
+        }
+      }
     }
   }
 
@@ -67,31 +68,184 @@ function dijkstra(
     path.unshift(at);
   }
 
-  return { path, distance: distances[end] };
+  const optimizedPath: string[] = [];
+  for (let i = 0; i < path.length; i++) {
+    if (i === 0 || path[i] !== path[i-1]) {
+      optimizedPath.push(path[i]);
+    }
+  }
+
+  return { path: optimizedPath, distance: distances[end] };
 }
 
-// POST /api/path
+function getBuildingNodes(buildingName: string, level?: string): string[] {
+  const building = buildingData[buildingName.toUpperCase()];
+  if (!building) return [];
+
+  if (level) {
+    const levelData = building.levels[level];
+    return levelData ? levelData.nodes.map(node => node.id) : [];
+  } else {
+    const allNodes: string[] = [];
+    for (const levelData of Object.values(building.levels)) {
+      allNodes.push(...levelData.nodes.map(node => node.id));
+    }
+    return allNodes;
+  }
+}
+
+function getBuildingEdges(buildingName: string, level?: string): { from: string; to: string; distance: number }[] {
+  const building = buildingData[buildingName.toUpperCase()];
+  if (!building) return [];
+
+  if (level) {
+    const levelData = building.levels[level];
+    return levelData ? levelData.edges : [];
+  } else {
+    const allEdges: { from: string; to: string; distance: number }[] = [];
+    for (const levelData of Object.values(building.levels)) {
+      allEdges.push(...levelData.edges);
+    }
+    return allEdges;
+  }
+}
+
+function getAllNodesAndEdges() {
+  const allNodes: string[] = [];
+  const allEdges: { from: string; to: string; distance: number }[] = [];
+
+  for (const building of Object.values(buildingData)) {
+    for (const levelData of Object.values(building.levels)) {
+      allNodes.push(...levelData.nodes.map(node => node.id));
+      allEdges.push(...levelData.edges);
+    }
+  }
+  
+  for (const linkNode of linkNodes) {
+    if (!allNodes.includes(linkNode.id)) {
+      allNodes.push(linkNode.id);
+    }
+  }
+  
+  for (const interlinkEdge of interlinkEdges) {
+    allEdges.push({
+      from: interlinkEdge.from,
+      to: interlinkEdge.to,
+      distance: interlinkEdge.weight
+    });
+  }
+  
+  const optimizedEdges = allEdges.filter(edge => {
+    if (edge.distance === 0 && (edge.from.includes('lift') || edge.to.includes('lift'))) {
+      return true;
+    }
+    return edge.distance > 0;
+  });
+  
+  return { allNodes, allEdges: optimizedEdges };
+}
+
 router.post('/', (req: Request, res: Response): void => {
-  const { building, from, to } = req.body;
-
-  if (!building || !from || !to) {
-    res.status(400).json({ error: 'Missing parameters' });
+  const { from, to } = req.body;
+  if (!from || !to) {
+    res.status(400).json({ error: '缺少必要参数: from, to' });
     return;
   }
-
-  const graph = buildingGraphs[building.toLowerCase()];
-  if (!graph) {
-    res.status(404).json({ error: 'Building not found' });
+  const { allNodes, allEdges } = getAllNodesAndEdges();
+  if (!allNodes.includes(from)) {
+    res.status(400).json({ error: `起点 '${from}' 不存在`, availableNodes: allNodes });
     return;
   }
-
-  const result = dijkstra(graph.nodes, graph.edges, from, to);
+  if (!allNodes.includes(to)) {
+    res.status(400).json({ error: `终点 '${to}' 不存在`, availableNodes: allNodes });
+    return;
+  }
+  const result = dijkstra(allNodes, allEdges, from, to);
   if (!result) {
-    res.status(400).json({ error: 'Path not found' });
+    res.status(400).json({ error: '无法找到从起点到终点的路径', from, to });
     return;
   }
   
-  res.json(result);
+  console.log('路径规划结果:', {
+    from,
+    to,
+    path: result.path,
+    distance: result.distance,
+    pathLength: result.path.length
+  });
+  
+  res.json({ ...result, from, to });
+});
+
+router.get('/nodes/:building', (req: Request, res: Response): void => {
+  const { building } = req.params;
+  const { level } = req.query;
+
+  if (!buildingData[building.toUpperCase()]) {
+    res.status(404).json({ 
+      error: '建筑不存在',
+      availableBuildings: Object.keys(buildingData)
+    });
+    return;
+  }
+
+  const nodes = getBuildingNodes(building, level as string);
+  res.json({
+    building,
+    level: level || 'all',
+    nodes,
+    count: nodes.length
+  });
+});
+
+router.get('/buildings', (req: Request, res: Response): void => {
+  const buildings = Object.keys(buildingData).map(name => ({
+    name,
+    floors: buildingData[name].floors,
+    levels: Object.keys(buildingData[name].levels)
+  }));
+  
+  res.json({
+    buildings,
+    count: buildings.length
+  });
+});
+
+router.get('/all-nodes', (req: Request, res: Response): void => {
+  const { allNodes } = getAllNodesAndEdges();
+  
+  res.json({
+    nodes: allNodes,
+    count: allNodes.length
+  });
+});
+
+router.get('/debug/:from/:to', (req: Request, res: Response): void => {
+  const { from, to } = req.params;
+  const { allNodes, allEdges } = getAllNodesAndEdges();
+  
+  if (!allNodes.includes(from)) {
+    res.status(400).json({ error: `起点 '${from}' 不存在`, availableNodes: allNodes });
+    return;
+  }
+  if (!allNodes.includes(to)) {
+    res.status(400).json({ error: `终点 '${to}' 不存在`, availableNodes: allNodes });
+    return;
+  }
+  
+  const relevantEdges = allEdges.filter(edge => 
+    edge.from === from || edge.to === from || 
+    edge.from === to || edge.to === to
+  );
+  
+  res.json({
+    from,
+    to,
+    totalNodes: allNodes.length,
+    totalEdges: allEdges.length,
+    relevantEdges,
+    allNodes: allNodes.slice(0, 50)
+  });
 });
 
 export default router;
