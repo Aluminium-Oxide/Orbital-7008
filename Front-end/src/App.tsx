@@ -194,201 +194,153 @@ function App() {
     }
   };
 
-  return(
+return (
   <>
-    {/* navigation frame*/}
-    <header className="fixed top-0 left-0 right-0 bg-blue-800 shadow-md z-50">
-      <div className="container mx-auto px-5 py-0">
-        {/* title */}
-        <div className="flex justify-between items-center py-2 px-4">
-          <h1 className="text-xl font-bold text-white">CDE Map</h1>
-
-        <div className="flex justify-end">
-              <button
-                onClick={findPath}
-                disabled={loading || !selectedBuilding || !fromNode || !toBuilding || !toNode}
-                className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 disabled:bg-gray-400 text-lx font-medium flex-shrink-0"
-              >
-                {loading ? 'loading...' : 'Find Path'}
-              </button>
-            </div>
-                    </div>
-      </div>
-    </header>
-
-    {currentPage === 'map' ? (
-      <>
-        <div className="fixed top-14 left-0 right-0 bg-blue-400 w-full shadow-md py-3 z-40">
-          <div className="flex flex-col pt-1 px-5 gap-2">
-            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto">
-              <div className="flex-1 min-w-0 flex items-center">
-                <label className="text-white text-lg font-medium whitespace-nowrap">Starting:</label>
-              </div>
-              <div className="flex-1 min-w-0 flex items-center">
-                <select
-                  value={selectedBuilding}
-                  onChange={e => setSelectedBuilding(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300"
+    <div className="flex flex-col h-screen overflow-hidden">
+      <div className="shrink-0">
+        <header className="bg-blue-800 shadow-md z-50">
+          <div className="container mx-auto px-5 py-0">
+            <div className="flex justify-between items-center py-2 px-4">
+              <h1 className="text-xl font-bold text-white">CDE Map</h1>
+              <div className="flex justify-end">
+                <button
+                  onClick={findPath}
+                  disabled={loading || !selectedBuilding || !fromNode || !toBuilding || !toNode}
+                  className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 disabled:bg-gray-400 text-lx font-medium flex-shrink-0"
                 >
+                  {loading ? 'loading...' : 'Find Path'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {currentPage === 'map' && (
+          <div className="bg-blue-400 w-full shadow-md py-3 z-40">
+            <div className="flex flex-col pt-1 px-5 gap-2">
+              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto">
+                <label className="text-white text-lg font-medium whitespace-nowrap">Starting:</label>
+                <select value={selectedBuilding} onChange={e => setSelectedBuilding(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300">
                   <option value="">Select Building</option>
                   {buildings.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
                 <span className="mx-1 text-white text-lg font-medium">-</span>
-              </div>
-              <div className="flex-1 min-w-0 flex items-center">
-                <select
-                  value={selectedLevel}
-                  onChange={e => setSelectedLevel(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                  disabled={!selectedBuilding}
-                >
+                <select value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
+                        disabled={!selectedBuilding}>
                   <option value="">Select Floor</option>
                   {levels.map(l => <option key={l} value={l}>{l}</option>)}
                 </select>
                 <span className="mx-1 text-white text-lg font-medium">:</span>
-              </div>
-              <div className="flex-1 min-w-0 flex items-center">
-                <select
-                  value={fromNode}
-                  onChange={e => setFromNode(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                  disabled={nodes.length === 0}
-                >
+                <select value={fromNode} onChange={e => setFromNode(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
+                        disabled={nodes.length === 0}>
                   <option value="">Select Room</option>
                   {nodes.map(n => <option key={n} value={n}>{n}</option>)}
                 </select>
               </div>
-            </div>
-            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto mt-2">
-              <div className="flex-1 min-w-0 flex items-center">
+              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto mt-2">
                 <label className="text-white text-lg font-medium whitespace-nowrap">Destination:</label>
-              </div>
-              <div className="flex-1 min-w-0 flex items-center">
-                <select
-                  value={toBuilding}
-                  onChange={e => setToBuilding(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                >
+                <select value={toBuilding} onChange={e => setToBuilding(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300">
                   <option value="">Select Building</option>
                   {buildings.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
                 <span className="mx-1 text-white text-lg font-medium">-</span>
-              </div>
-              <div className="flex-1 min-w-0 flex items-center">
-                <select
-                  value={toLevel}
-                  onChange={e => setToLevel(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                  disabled={!toBuilding}
-                >
+                <select value={toLevel} onChange={e => setToLevel(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
+                        disabled={!toBuilding}>
                   <option value="">Select Floor</option>
                   {toLevels.map(l => <option key={l} value={l}>{l}</option>)}
                 </select>
                 <span className="mx-1 text-white text-lg font-medium">:</span>
-              </div>
-              <div className="flex-1 min-w-0 flex items-center">
-                <select
-                  value={toNode}
-                  onChange={e => setToNode(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                  disabled={toNodes.length === 0}
-                >
+                <select value={toNode} onChange={e => setToNode(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
+                        disabled={toNodes.length === 0}>
                   <option value="">Select Room</option>
                   {toNodes.map(n => <option key={n} value={n}>{n}</option>)}
                 </select>
               </div>
+              {error && <div className="text-red-100 mt-2">{error}</div>}
             </div>
-            {error && <div className="text-red-100 mt-2">{error}</div>}
           </div>
-        </div>
-        <div
-          className="fixed left-0 right-0 bottom-20 bg-white z-10"
-          style={{
-            top: 180
-          }}
-        >
-          <div className="h-full w-full">
-            <MapComponent
-              destination={segments.length > 0 ? segments[currentSegmentIdx].building : mapTarget}
-              currentFloor={segments.length > 0 ? segments[currentSegmentIdx].level : currentFloor}
-              path={segments.length > 0 ? segments[currentSegmentIdx].nodes : []}
-              highlightNode={highlightNode}
-            />
-            {segments.length > 0 && (
-              <div className="fixed top-24 right-8 left-8 z-30 flex justify-between items-center">
-                <button
-                  className="bg-blue-600 text-white px-3 py-1 rounded"
-                  onClick={() => {
-                    const prevIdx = Math.max(currentSegmentIdx - 1, 0);
-                    setCurrentSegmentIdx(prevIdx);
-                    console.log('切换到段:', prevIdx, segments[prevIdx]);
-                  }}
-                  disabled={currentSegmentIdx <= 0}
-                >
-                  Back
-                </button>
-                <button
-                  className="bg-blue-600 text-white px-3 py-1 rounded"
-                  onClick={() => {
-                    const nextIdx = Math.min(currentSegmentIdx + 1, segments.length - 1);
-                    setCurrentSegmentIdx(nextIdx);
-                    console.log('切换到段:', nextIdx, segments[nextIdx]);
-                  }}
-                  disabled={currentSegmentIdx >= segments.length-1}
-                >
-                  Next
-                </button>
-              </div>
-            )}
+        )}
+      </div>
+
+      {currentPage === 'map' && (
+        <div className="flex-grow min-h-0 relative z-10 overflow-hidden">
+          <MapComponent
+            destination={segments.length > 0 ? segments[currentSegmentIdx].building : mapTarget}
+            currentFloor={segments.length > 0 ? segments[currentSegmentIdx].level : currentFloor}
+            path={segments.length > 0 ? segments[currentSegmentIdx].nodes : []}
+            highlightNode={highlightNode}
+          />
+
+          {segments.length > 0 && (
+            <div className="absolute top-4 left-4 right-4 z-30 flex justify-between items-center">
+              <button
+                className="bg-blue-400 text-white px-3 py-1 rounded"
+                onClick={() => setCurrentSegmentIdx(prev => Math.max(prev - 1, 0))}
+                disabled={currentSegmentIdx <= 0}
+              >
+                Back
+              </button>
+              <button
+                className="bg-blue-400 text-white px-3 py-1 rounded"
+                onClick={() => setCurrentSegmentIdx(prev => Math.min(prev + 1, segments.length - 1))}
+                disabled={currentSegmentIdx >= segments.length - 1}
+              >
+                Next
+              </button>
+            </div>
+          )}
+
+          <div className="absolute bottom-6 right-6 flex flex-col space-y-3 z-20">
+            <button
+              onClick={() => setShowHelp(true)}
+              className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95"
+            >
+              <i className="fa-solid fa-question text-xl"></i>
+            </button>
           </div>
-        <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-10">
-          <button 
-          onClick={() => setShowHelp(true)}
-          id="help" className="w-12 h-12 z-20 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95">
-          <i className="fa-solid fa-question text-xl"></i>
-          </button>
-          
+
           {showHelp && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 z-50">
-              <div className="mt-[40vh] mx-auto max-w-md">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-full">
-                  <h2 className="text-xl font-bold mb-4">User guide</h2>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700 text-sm">
-                    <li>Click on the building names to see the floor plan of the whole building</li>
-                    <li>Select start and end point and press search on top to find the shortest path to your destination</li>
-                    <li>More functions and buildings coming soon...</li>
-                  </ul>
-                  <div className="mt-4 text-right">
-                    <button onClick={() => setShowHelp(false)}
-                      className="text-blue-600 hover:underline">
-                      Close
-                    </button>
-                  </div>
+            <div className="absolute inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
+                <h2 className="text-xl font-bold mb-4">User guide</h2>
+                <ul className="list-disc pl-5 space-y-2 text-gray-700 text-sm">
+                  <li>Click on building names to view floors</li>
+                  <li>Select start and destination to find a route</li>
+                  <li>More features coming soon...</li>
+                </ul>
+                <div className="mt-4 text-right">
+                  <button onClick={() => setShowHelp(false)} className="text-blue-600 hover:underline">
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
           )}
-
         </div>
-      </div>
-<div className="fixed bottom-0 left-0 right-0 z-50">
-  {segments.length > 0 ? (
-    <div className="bg-blue-500 text-white text-center py-2 flex justify-center items-center gap-6">
-      <span>Current segment: {segments[currentSegmentIdx].nodes.join(' → ')}</span>
-      <span>building: {segments[currentSegmentIdx].building}</span>
-      <span>floor: {segments[currentSegmentIdx].level}</span>
-      <span>no. {currentSegmentIdx + 1} / {segments.length}</span>
-    </div>
-  ) : (
-    <div className="bg-blue-500 text-white text-center py-3 text-lg">
-      Welcome to CDE Map !
-    </div>
-  )}
-</div>
-      </>
-    ) : null}
-    </>
-  );
-}
+      )}
 
+      <div className="shrink-0 z-50">
+        {segments.length > 0 ? (
+          <div className="bg-blue-500 text-white text-center py-2 flex justify-center items-center gap-6">
+            <span>Current segment: {segments[currentSegmentIdx].nodes.join(' → ')}</span>
+            <span>building: {segments[currentSegmentIdx].building}</span>
+            <span>floor: {segments[currentSegmentIdx].level}</span>
+            <span>no. {currentSegmentIdx + 1} / {segments.length}</span>
+          </div>
+        ) : (
+          <div className="bg-blue-500 text-white text-center py-3 text-lg">
+            Welcome to CDE Map !
+          </div>
+        )}
+      </div>
+    </div>
+  </>
+);
+};
 export default App;
