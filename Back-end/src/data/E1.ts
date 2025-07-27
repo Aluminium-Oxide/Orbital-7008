@@ -4,11 +4,19 @@ export const E1: Building = {
     floors: 8,
     levels:{
      "01":{
-        image: "/E1L1.png",
+        image: "/E101.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
+          {id: "E1-01-lift1", x: 1928, y: 1099},
         ],
         edges: [
+          {from: "E1-01-lift1", to:"E1-02-lift1", distance:5000},
+          {from: "E1-01-lift1", to:"E1-03-lift1", distance:5000},
+          {from: "E1-01-lift1", to:"E1-04-lift1", distance:5000},
+          {from: "E1-01-lift1", to:"E1-05-lift1", distance:5000},
+          {from: "E1-01-lift1", to:"E1-06-lift1", distance:5000},
+          {from: "E1-01-lift1", to:"E1-07-lift1", distance:5000},
+          {from: "E1-01-lift1", to:"E1-08-lift1", distance:5000},
         ]},
 
      "02":{
