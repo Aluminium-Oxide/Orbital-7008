@@ -138,7 +138,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
     : { width: mapWidth, height: mapHeight };
 
   const dynamicCenter: [number, number] = [mapSize.height / 2, mapSize.width / 2];
-  const dynamicBounds: [[number, number], [number, number]] = [[0, 0], [mapSize.height, mapSize.width]];
+  const paddingRatio = 0.3;
+  const dynamicBounds: [[number, number], [number, number]] = [
+    [-mapSize.height * paddingRatio, -mapSize.width * paddingRatio],
+    [mapSize.height * (1 + paddingRatio), mapSize.width * (1 + paddingRatio)],
+  ];
+
 
   useEffect(() => {
     setSelectedBuilding(null);
@@ -171,7 +176,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
     };
 
     checkImage(floorImagePath).then(validPath => {
-      console.log("加载楼层图:", validPath);
+      console.log("Loading floorplan:", validPath);
     });
 
     import('../services/buildingService').then(({ BuildingService }) => {
@@ -233,11 +238,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
     <div className="relative h-[90vh] w-full base-map-container">
       {navigationMode && clickedCoordinates && (
         <div className="absolute top-4 right-4 bg-black bg-opacity-90 text-white px-3 py-2 rounded-lg z-[9999] font-mono text-sm shadow-lg border border-gray-600">
-          <div className="font-bold mb-1">点击坐标</div>
+          <div className="font-bold mb-1">coordinate clicked</div>
           <div>X: {Math.round(clickedCoordinates.x)}</div>
           <div>Y: {Math.round(clickedCoordinates.y)}</div>
           <div className="text-xs text-gray-300 mt-1">
-            <div>Leaflet格式: [{Math.round(clickedCoordinates.y)}, {Math.round(clickedCoordinates.x)}]</div>
+            <div>Leaflet format: [{Math.round(clickedCoordinates.y)}, {Math.round(clickedCoordinates.x)}]</div>
           </div>
           {currentLevelData && (
             <div className="mt-2 text-xs text-gray-300">
@@ -248,7 +253,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
             onClick={() => setClickedCoordinates(null)}
             className="mt-2 text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded"
           >
-            清除
+            cancel
           </button>
         </div>
       )}

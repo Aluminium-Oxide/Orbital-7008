@@ -1,4 +1,10 @@
 export const linkNodes = [
+  { id: "EA-06-node5", x: 136, y: 1051, building: "EA", level: "06" },
+  { id: "E1A-03-node2", x: 272, y: 1219, building: "E1A", level: "03" },
+
+  { id: "EA-07-node4", x: 128, y: 1071, building: "EA", level: "07" },
+  { id: "E1A-04-node4", x: 76, y: 1223, building: "E1A", level: "04" },
+
   { id: "E1-04-node5", x: 351, y: 592, building: "E1", level: "04" },
   { id: "E1A-04-node2", x: 2123, y: 427, building: "E1A", level: "04" },
 
@@ -25,6 +31,9 @@ export const linkNodes = [
 ];
 
 export const interlinkEdges = [
+  { from: "EA-06-node5", to: "E1A-03-node2", weight: 1 },
+  { from: "EA-07-node4", to: "E1A-04-node4", weight: 1 },
+  
   { from: "E1-04-node5", to: "E1A-04-node2", weight: 1 },
   { from: "E1-04-node3", to: "E4-04-node2", weight: 1 },
   { from: "E1A-04-node5", to: "EA-07-node6", weight: 1 },

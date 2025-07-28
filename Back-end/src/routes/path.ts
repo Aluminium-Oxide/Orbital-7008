@@ -162,7 +162,7 @@ router.post('/', (req: Request, res: Response): void => {
   }
   const result = dijkstra(allNodes, allEdges, from, to);
   if (!result) {
-    res.status(400).json({ error: ' gg no path found', from, to });
+    res.status(400).json({ error: ' no path found', from, to });
     return;
   }
   

@@ -1,9 +1,9 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import React, { useState, useEffect } from 'react';
-import 'leaflet/dist/leaflet.css';  // import CSS
+import 'leaflet/dist/leaflet.css';
 import MapComponent from './Component/MapComponent';
-import './index.css'
-import './App.css'; // import custom styles
+import './index.css';
+import './App.css';
 import { LINK_NODE_IDS } from './data/linknodes';
 
 function splitPathBySegments(path: string[], nodeIdToLevel: (id: string) => {building: string, level: string}) {
@@ -46,9 +46,9 @@ function splitPathBySegments(path: string[], nodeIdToLevel: (id: string) => {bui
 }
 
 function App() {
-  const [currentFloor, setCurrentFloor] = useState("01"); 
+  const [currentFloor, setCurrentFloor] = useState("01");
   const [mapTarget, setMapTarget] = useState("");
-  const [currentPage, setCurrentPage] = useState<'map' | 'path'>('map');
+  const [currentPage] = useState<'map' | 'path'>('map');
   const [showHelp, setShowHelp] = useState(false);
   const [buildings, setBuildings] = useState<string[]>([]);
   const [selectedBuilding, setSelectedBuilding] = useState<string>('');
@@ -71,12 +71,8 @@ function App() {
   useEffect(() => {
     fetch('http://localhost:3001/api/path/buildings')
       .then(res => res.json())
-      .then(data => {
-        setBuildings(data.buildings.map((b: any) => b.name));
-      })
-      .catch(err => {
-        setError('no back-end found');
-      });
+      .then(data => setBuildings(data.buildings.map((b: any) => b.name)))
+      .catch(() => setError('no back-end found'));
   }, []);
 
   useEffect(() => {
@@ -120,6 +116,7 @@ function App() {
         .catch(() => setError('destination load fail'));
     }
   }, [toBuilding]);
+
   useEffect(() => {
     if (toBuilding && toLevel) {
       fetch(`http://localhost:3001/api/path/nodes/${toBuilding}?level=${toLevel}`)
@@ -141,9 +138,7 @@ function App() {
   }, [selectedBuilding, selectedLevel, fromNode]);
 
   useEffect(() => {
-    if (pathResult && pathResult.path) {
-      setHighlightNode(null);
-    }
+    if (pathResult?.path) setHighlightNode(null);
   }, [pathResult]);
 
   const findPath = async () => {
@@ -174,12 +169,7 @@ function App() {
         setMapTarget(selectedBuilding);
         const nodeIdToLevel = (id: string) => {
           const parts = id.split('-');
-          if (parts.length >= 2) {
-            const building = parts[0];
-            const level = parts[1];
-            return { building, level };
-          }
-          return { building: selectedBuilding, level: selectedLevel || "01" };
+          return { building: parts[0], level: parts[1] || "01" };
         };
         const segs = splitPathBySegments(data.path, nodeIdToLevel);
         setSegments(segs);
@@ -187,143 +177,139 @@ function App() {
       } else {
         setError(data.error || 'route finding fail');
       }
-    } catch (err) {
+    } catch {
       setError('wifi error,please check if back-end working');
     } finally {
       setLoading(false);
     }
   };
 
-return (
-  <>
+  return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <div className="shrink-0">
-        <header className="bg-blue-800 shadow-md z-50">
-          <div className="container mx-auto px-5 py-0">
-            <div className="flex justify-between items-center py-2 px-4">
-              <h1 className="text-xl font-bold text-white">CDE Map</h1>
-              <div className="flex justify-end">
-                <button
-                  onClick={findPath}
-                  disabled={loading || !selectedBuilding || !fromNode || !toBuilding || !toNode}
-                  className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 disabled:bg-gray-400 text-lx font-medium flex-shrink-0"
-                >
-                  {loading ? 'loading...' : 'Find Path'}
+      <header className="bg-blue-800 shadow-md z-50">
+        <div className="container mx-auto px-5">
+          <div className="flex justify-between items-center py-2 px-4">
+            <h1 className="text-xl font-bold text-white">CDE Map</h1>
+            <button
+              onClick={findPath}
+              disabled={loading || !selectedBuilding || !fromNode || !toBuilding || !toNode}
+              className="bg-blue-400 text-white px-6 py-2 rounded-lg hover:bg-blue-500 disabled:bg-gray-400 text-lx font-medium"
+            >
+              {loading ? 'loading...' : 'Find Path'}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {currentPage === 'map' && (
+        <div className="bg-blue-400 w-full shadow-md py-3 z-40 space-y-2">
+          <div className="flex flex-row gap-2 px-5">
+            <div className="w-1/4 flex items-center text-white text-lg justify-center items-center font-medium">Start:</div>
+            <div className="w-1/4 flex items-center gap-1">
+              <select value={selectedBuilding} onChange={e => setSelectedBuilding(e.target.value)}
+                      className="w-full px-2 py-2 rounded-lg border border-gray-300">
+                <option value="">Building</option>
+                {buildings.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+              <span className="text-white font-bold">-</span>
+            </div>
+            <div className="w-1/4 flex items-center gap-1">
+              <select value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)}
+                      className="w-full px-2 py-2 rounded-lg border border-gray-300"
+                      disabled={!selectedBuilding}>
+                <option value="">Floor</option>
+                {levels.map(l => <option key={l} value={l}>{l}</option>)}
+              </select>
+              <span className="text-white font-bold">:</span>
+            </div>
+            <div className="w-1/4">
+              <select value={fromNode} onChange={e => setFromNode(e.target.value)}
+                      className="w-full px-2 py-2 rounded-lg border border-gray-300"
+                      disabled={nodes.length === 0}>
+                <option value="">Room</option>
+                {nodes.map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-row gap-2 px-5">
+            <div className="w-1/4 flex items-center justify-center items-center text-white text-lg font-medium">Destination:</div>
+            <div className="w-1/4 flex items-center gap-1">
+              <select value={toBuilding} onChange={e => setToBuilding(e.target.value)}
+                      className="w-full px-2 py-2 rounded-lg border border-gray-300">
+                <option value="">Building</option>
+                {buildings.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+              <span className="text-white font-bold">-</span>
+            </div>
+            <div className="w-1/4 flex items-center gap-1">
+              <select value={toLevel} onChange={e => setToLevel(e.target.value)}
+                      className="w-full px-2 py-2 rounded-lg border border-gray-300"
+                      disabled={!toBuilding}>
+                <option value="">Floor</option>
+                {toLevels.map(l => <option key={l} value={l}>{l}</option>)}
+              </select>
+              <span className="text-white font-bold">:</span>
+            </div>
+            <div className="w-1/4">
+              <select value={toNode} onChange={e => setToNode(e.target.value)}
+                      className="w-full px-2 py-2 rounded-lg border border-gray-300"
+                      disabled={toNodes.length === 0}>
+                <option value="">Room</option>
+                {toNodes.map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+          </div>
+          {error && <div className="text-red-100 px-5">{error}</div>}
+        </div>
+      )}
+
+      <div className="flex-grow relative z-10 overflow-hidden">
+        <MapComponent
+          destination={segments.length > 0 ? segments[currentSegmentIdx].building : mapTarget}
+          currentFloor={segments.length > 0 ? segments[currentSegmentIdx].level : currentFloor}
+          path={segments.length > 0 ? segments[currentSegmentIdx].nodes : []}
+          highlightNode={highlightNode}
+        />
+
+        {segments.length > 0 && (
+          <div className="absolute top-4 left-4 right-4 z-30 flex justify-end items-center space-x-3">
+            <button className="bg-blue-400 text-white px-3 py-1 rounded"
+                    onClick={() => setCurrentSegmentIdx(i => Math.max(i - 1, 0))}
+                    disabled={currentSegmentIdx <= 0}>Back</button>
+            <button className="bg-blue-400 text-white px-3 py-1 rounded"
+                    onClick={() => setCurrentSegmentIdx(i => Math.min(i + 1, segments.length - 1))}
+                    disabled={currentSegmentIdx >= segments.length - 1}>Next</button>
+          </div>
+        )}
+
+        <div className="absolute bottom-6 right-6 z-20">
+          <button
+            onClick={() => setShowHelp(true)}
+            className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 active:scale-95"
+          >
+            <i className="fa-solid fa-question text-xl"></i>
+          </button>
+        </div>
+
+        {showHelp && (
+          <div className="absolute inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
+              <h2 className="text-xl font-bold mb-4">User guide</h2>
+              <ul className="list-disc pl-5 space-y-2 text-gray-700 text-sm">
+                <li>Click on building names to view the floor plan of each building</li>
+                <li>Select start and destination location to check the shortest route between the two locations</li>
+                <li>More features coming soon...</li>
+              </ul>
+              <div className="mt-4 text-right">
+                <button onClick={() => setShowHelp(false)} className="text-blue-600 hover:underline">
+                  Close
                 </button>
               </div>
             </div>
           </div>
-        </header>
-
-        {currentPage === 'map' && (
-          <div className="bg-blue-400 w-full shadow-md py-3 z-40">
-            <div className="flex flex-col pt-1 px-5 gap-2">
-              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto">
-                <label className="text-white text-lg font-medium whitespace-nowrap">Starting:</label>
-                <select value={selectedBuilding} onChange={e => setSelectedBuilding(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300">
-                  <option value="">Select Building</option>
-                  {buildings.map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
-                <span className="mx-1 text-white text-lg font-medium">-</span>
-                <select value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                        disabled={!selectedBuilding}>
-                  <option value="">Select Floor</option>
-                  {levels.map(l => <option key={l} value={l}>{l}</option>)}
-                </select>
-                <span className="mx-1 text-white text-lg font-medium">:</span>
-                <select value={fromNode} onChange={e => setFromNode(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                        disabled={nodes.length === 0}>
-                  <option value="">Select Room</option>
-                  {nodes.map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
-              </div>
-              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto mt-2">
-                <label className="text-white text-lg font-medium whitespace-nowrap">Destination:</label>
-                <select value={toBuilding} onChange={e => setToBuilding(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300">
-                  <option value="">Select Building</option>
-                  {buildings.map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
-                <span className="mx-1 text-white text-lg font-medium">-</span>
-                <select value={toLevel} onChange={e => setToLevel(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                        disabled={!toBuilding}>
-                  <option value="">Select Floor</option>
-                  {toLevels.map(l => <option key={l} value={l}>{l}</option>)}
-                </select>
-                <span className="mx-1 text-white text-lg font-medium">:</span>
-                <select value={toNode} onChange={e => setToNode(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300"
-                        disabled={toNodes.length === 0}>
-                  <option value="">Select Room</option>
-                  {toNodes.map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
-              </div>
-              {error && <div className="text-red-100 mt-2">{error}</div>}
-            </div>
-          </div>
         )}
       </div>
-
-      {currentPage === 'map' && (
-        <div className="flex-grow min-h-0 relative z-10 overflow-hidden">
-          <MapComponent
-            destination={segments.length > 0 ? segments[currentSegmentIdx].building : mapTarget}
-            currentFloor={segments.length > 0 ? segments[currentSegmentIdx].level : currentFloor}
-            path={segments.length > 0 ? segments[currentSegmentIdx].nodes : []}
-            highlightNode={highlightNode}
-          />
-
-          {segments.length > 0 && (
-            <div className="absolute top-4 left-4 right-4 z-30 flex justify-end items-center space-x-3">
-              <button
-                className="bg-blue-400 text-white px-3 py-1 rounded"
-                onClick={() => setCurrentSegmentIdx(prev => Math.max(prev - 1, 0))}
-                disabled={currentSegmentIdx <= 0}
-              >
-                Back
-              </button>
-              <button
-                className="bg-blue-400 text-white px-3 py-1 rounded"
-                onClick={() => setCurrentSegmentIdx(prev => Math.min(prev + 1, segments.length - 1))}
-                disabled={currentSegmentIdx >= segments.length - 1}
-              >
-                Next
-              </button>
-            </div>
-          )}
-
-          <div className="absolute bottom-6 right-6 flex flex-col space-y-3 z-20">
-            <button
-              onClick={() => setShowHelp(true)}
-              className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors touch-manipulation active:scale-95"
-            >
-              <i className="fa-solid fa-question text-xl"></i>
-            </button>
-          </div>
-
-          {showHelp && (
-            <div className="absolute inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
-                <h2 className="text-xl font-bold mb-4">User guide</h2>
-                <ul className="list-disc pl-5 space-y-2 text-gray-700 text-sm">
-                  <li>Click on building names to view floors</li>
-                  <li>Select start and destination to find a route</li>
-                  <li>More features coming soon...</li>
-                </ul>
-                <div className="mt-4 text-right">
-                  <button onClick={() => setShowHelp(false)} className="text-blue-600 hover:underline">
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
 
       <div className="shrink-0 z-50">
         {segments.length > 0 ? (
@@ -335,12 +321,12 @@ return (
           </div>
         ) : (
           <div className="bg-blue-500 text-white text-center py-3 text-lg">
-            Welcome to CDE Map !
+            Welcome to CDE Map!
           </div>
         )}
       </div>
     </div>
-  </>
-);
-};
+  );
+}
+
 export default App;

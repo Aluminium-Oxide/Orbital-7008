@@ -47,7 +47,7 @@ export const EA: Building = {
           {from: "EA-01-door", to: "LT7A", distance: 425},
           {from: "EA-01-door", to: "EA-01-stairs1", distance: 437},
           {from: "EA-01-door", to: "EA-01-stairs2", distance: 113},
-          {from: "Engineering Auditorium", to: "LT7", distance: 359},
+          {from: "Engineering Auditorium", to: "LT7A", distance: 359},
           {from: "Engineering Auditorium", to: "EA-01-stairs1", distance: 599},
           {from: "Engineering Auditorium", to: "EA-01-stairs2", distance: 189},
           //backwards
@@ -63,7 +63,7 @@ export const EA: Building = {
           {from: "LT7A", to: "EA-01-door", distance: 425},
           {from: "EA-01-stairs1", to: "EA-01-door", distance: 437},
           {from: "EA-01-stairs2", to: "EA-01-door", distance: 113},
-          {from: "LT7", to: "Engineering Auditorium", distance: 359},
+          {from: "LT7A", to: "Engineering Auditorium", distance: 359},
           {from: "EA-01-stairs1", to: "Engineering Auditorium", distance: 599},
           {from: "EA-01-stairs2", to: "Engineering Auditorium", distance: 189},]},
 
@@ -136,6 +136,7 @@ export const EA: Building = {
         image: "/EA03.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[
+        {id: "LT7", x: 1307, y: 1273},
         {id: "EA-03-02", x: 596, y: 580},
         {id: "EA-03-04", x: 694, y: 537},
         {id: "EA-03-05", x: 753, y: 537},
@@ -149,7 +150,8 @@ export const EA: Building = {
         {id: "EA-03-node1", x: 1483, y: 537},
         {id: "EA-03-node2", x: 1664, y: 691},
         {id: "EA-03-node3", x: 1483, y: 870},
-        {id: "EA-03-node4", x: 1307, y: 870},], 
+        {id: "EA-03-node4", x: 1307, y: 870},
+      ], 
        edges:[
         //lifts
         {from: "EA-03-lift1", to: "EA-01-lift1", distance: 5000 },
@@ -177,7 +179,9 @@ export const EA: Building = {
         { from: "EA-03-node3", to: "EA-03-lift2", distance: 70 },
         { from: "EA-03-node3", to: "EA-03-node4", distance: 176 },
         { from: "EA-03-node4", to: "EA-03-11", distance: 140 },
+        { from: "EA-03-11", to: "LT7", distance: 263 },
         //backwards 
+        { from: "LT7", to: "EA-03-11", distance: 263 },
         { from: "EA-03-11", to: "EA-03-node4", distance: 140 },
         { from: "EA-03-node4", to: "EA-03-node3", distance: 176 },
         { from: "EA-03-lift2", to: "EA-03-node3", distance: 70 },
