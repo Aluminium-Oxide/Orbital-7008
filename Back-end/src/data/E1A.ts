@@ -51,14 +51,14 @@ export const E1A: Building = {
                 {from: "E1A-02-19", to: "E1A-02-node1", distance: 217},
                 {from: "E1A-02-node1", to: "E1A-02-04", distance: 112},
                 {from: "E1A-02-04", to: "E1A-02-05", distance: 288},
-                {from: "E1A-02-05", to: "E1A-02-18", distance: 0},
+                {from: "E1A-02-05", to: "E1A-02-18", distance: 1},
                 {from: "E1A-02-18", to: "E1A-02-17", distance: 364},
                 //backwards
                 {from: "E1A-02-19", to: "E1A-02-lift1", distance: 199},
                 {from: "E1A-02-node1", to: "E1A-02-19", distance: 217},
                 {from: "E1A-02-04", to: "E1A-02-node1", distance: 112},
                 {from: "E1A-02-05", to: "E1A-02-04", distance: 288},
-                {from: "E1A-02-18", to: "E1A-02-05", distance: 0},
+                {from: "E1A-02-18", to: "E1A-02-05", distance: 1},
                 {from: "E1A-02-17", to: "E1A-02-18", distance: 364},]},
            
             "03": {
@@ -207,7 +207,7 @@ export const E1A: Building = {
                 //forwards
                 {from: "E1A-07-lift1", to: "E1A-07-03", distance: 250},
                 {from: "E1A-07-03", to: "E1A-07-04~16", distance: 180},
-                {from: "E1A-07-4~16", to: "E1A-07-19~20", distance: 1300},
+                {from: "E1A-07-04~16", to: "E1A-07-19~20", distance: 1300},
                 //backwards
                 {from: "E1A-07-19~20", to: "E1A-07-4~16", distance: 1300},
                 {from: "E1A-07-04~16", to: "E1A-07-03", distance: 180},
