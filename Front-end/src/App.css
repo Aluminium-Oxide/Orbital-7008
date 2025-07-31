@@ -80,3 +80,15 @@ header {
   transition: transform 0.2s ease;
   will-change: transform;
 }
+
+.start-point-icon {
+  z-index: 1000 !important;
+}
+
+.start-point-icon svg {
+  transition: transform 0.2s ease;
+}
+
+.start-point-icon:hover svg {
+  transform: scale(1.1);
+}

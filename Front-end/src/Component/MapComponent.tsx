@@ -88,6 +88,29 @@ const highlightIcon = L.divIcon({
   iconAnchor: [12, 24],
 });
 
+const startPointIcon = L.divIcon({
+  className: 'start-point-icon',
+  html: `
+    <div style="
+      position: relative;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <svg width="32" height="32" viewBox="0 0 24 24" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" 
+              fill="#ff0000" stroke="#ffffff" stroke-width="1.5"/>
+        <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="#ff0000" stroke-width="0.5"/>
+        <circle cx="10.5" cy="7.5" r="1" fill="rgba(255,255,255,0.8)"/>
+      </svg>
+    </div>
+  `,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32], 
+});
+
 const buildings: Building[] = [
   { id: 0, name: "EA", x: 356, y: 116 },
   { id: 1, name: "E1", x: 520, y: 900 },
@@ -116,9 +139,10 @@ interface MapComponentProps {
   currentFloor: string;
   path?: string[];
   highlightNode?: string | null;
+  startNode?: string | null;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, path, highlightNode }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, path, highlightNode, startNode }) => {
   const mapRef = useRef<L.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -394,7 +418,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
           <Marker
             key={node.id}
             position={node.position}
-            icon={highlightNode === node.id ? highlightIcon : NodeImageIcon("/map/1.png", zoomLevel)}
+            icon={
+              startNode === node.id ? startPointIcon :
+              highlightNode === node.id ? highlightIcon : 
+              NodeImageIcon("/map/1.png", zoomLevel)
+            }
           >
             <Popup>{node.name}</Popup>
           </Marker>

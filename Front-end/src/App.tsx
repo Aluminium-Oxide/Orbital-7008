@@ -2,6 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import React, { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import MapComponent from './Component/MapComponent';
+import TransitionModal from './Component/TransitionModal';
 import './index.css';
 import './App.css';
 import { LINK_NODE_IDS } from './data/linknodes';
@@ -67,6 +68,16 @@ function App() {
   const [toNodes, setToNodes] = useState<string[]>([]);
   const [toNode, setToNode] = useState('');
   const [highlightNode, setHighlightNode] = useState<string | null>(null);
+  
+  const [showTransitionModal, setShowTransitionModal] = useState(false);
+  const [transitionInfo, setTransitionInfo] = useState<{
+    fromBuilding: string;
+    fromLevel: string;
+    toBuilding: string;
+    toLevel: string;
+  } | null>(null);
+
+  const [pendingTransitionIdx, setPendingTransitionIdx] = useState<number | null>(null);
 
   useEffect(() => {
     fetch('http://localhost:3001/api/path/buildings')
@@ -141,6 +152,31 @@ function App() {
     if (pathResult?.path) setHighlightNode(null);
   }, [pathResult]);
 
+  const handleTransitionContinue = () => {
+    setShowTransitionModal(false);
+    setCurrentSegmentIdx(prev => prev + 1);
+    
+    if (currentSegmentIdx + 1 < segments.length - 1) {
+      const currentSegment = segments[currentSegmentIdx + 1];
+      const nextSegment = segments[currentSegmentIdx + 2];
+      
+      if (currentSegment.building !== nextSegment.building || currentSegment.level !== nextSegment.level) {
+        setTransitionInfo({
+          fromBuilding: currentSegment.building,
+          fromLevel: currentSegment.level,
+          toBuilding: nextSegment.building,
+          toLevel: nextSegment.level
+        });
+        setShowTransitionModal(true);
+      }
+    }
+  };
+
+  const handleTransitionBack = () => {
+    setShowTransitionModal(false);
+    setCurrentSegmentIdx(prev => Math.max(prev - 1, 0));
+  };
+
   const findPath = async () => {
     if (!selectedBuilding || !fromNode || !toBuilding || !toNode) {
       setError('Please select start and end point');
@@ -174,6 +210,27 @@ function App() {
         const segs = splitPathBySegments(data.path, nodeIdToLevel);
         setSegments(segs);
         setCurrentSegmentIdx(0);
+        
+        if (segs.length > 1) {
+          const firstSegment = segs[0];
+          const secondSegment = segs[1];
+          
+
+          const fromBuilding = firstSegment.building;
+          const fromLevel = firstSegment.level;
+          const toBuilding = secondSegment.building;
+          const toLevel = secondSegment.level;
+          
+          if (fromBuilding !== toBuilding || fromLevel !== toLevel) {
+            setTransitionInfo({
+              fromBuilding,
+              fromLevel,
+              toBuilding,
+              toLevel
+            });
+            setShowTransitionModal(true);
+          }
+        }
       } else {
         setError(data.error || 'route finding fail');
       }
@@ -182,6 +239,49 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (!showTransitionModal && pendingTransitionIdx !== null) {
+      setCurrentSegmentIdx(pendingTransitionIdx);
+      setPendingTransitionIdx(null);
+    }
+  }, [showTransitionModal, pendingTransitionIdx]);
+
+  const handleNext = () => {
+    if (showTransitionModal && pendingTransitionIdx !== null) {
+      setShowTransitionModal(false);
+      setCurrentSegmentIdx(pendingTransitionIdx);
+      setPendingTransitionIdx(null);
+      return;
+    }
+    const nextIdx = currentSegmentIdx + 1;
+    if (nextIdx < segments.length) {
+      const currentSegment = segments[currentSegmentIdx];
+      const nextSegment = segments[nextIdx];
+      if (currentSegment.building !== nextSegment.building || currentSegment.level !== nextSegment.level) {
+        setTransitionInfo({
+          fromBuilding: currentSegment.building,
+          fromLevel: currentSegment.level,
+          toBuilding: nextSegment.building,
+          toLevel: nextSegment.level
+        });
+        setPendingTransitionIdx(nextIdx);
+        setShowTransitionModal(true);
+      } else {
+        setCurrentSegmentIdx(nextIdx);
+      }
+    }
+  };
+
+  const handleBack = () => {
+    if (showTransitionModal && pendingTransitionIdx !== null) {
+      setShowTransitionModal(false);
+      setPendingTransitionIdx(null);
+      setCurrentSegmentIdx(currentSegmentIdx);
+      return;
+    }
+    setCurrentSegmentIdx(i => Math.max(i - 1, 0));
   };
 
   return (
@@ -270,15 +370,16 @@ function App() {
           currentFloor={segments.length > 0 ? segments[currentSegmentIdx].level : currentFloor}
           path={segments.length > 0 ? segments[currentSegmentIdx].nodes : []}
           highlightNode={highlightNode}
+          startNode={fromNode || null}
         />
 
         {segments.length > 0 && (
           <div className="absolute top-4 left-4 right-4 z-30 flex justify-end items-center space-x-3">
             <button className="bg-blue-400 text-white px-3 py-1 rounded"
-                    onClick={() => setCurrentSegmentIdx(i => Math.max(i - 1, 0))}
+                    onClick={handleBack}
                     disabled={currentSegmentIdx <= 0}>Back</button>
             <button className="bg-blue-400 text-white px-3 py-1 rounded"
-                    onClick={() => setCurrentSegmentIdx(i => Math.min(i + 1, segments.length - 1))}
+                    onClick={handleNext}
                     disabled={currentSegmentIdx >= segments.length - 1}>Next</button>
           </div>
         )}
@@ -325,6 +426,16 @@ function App() {
           </div>
         )}
       </div>
+
+      {showTransitionModal && transitionInfo && (
+        <TransitionModal
+          isVisible={showTransitionModal && !!transitionInfo}
+          fromBuilding={transitionInfo?.fromBuilding || ''}
+          fromLevel={transitionInfo?.fromLevel || ''}
+          toBuilding={transitionInfo?.toBuilding || ''}
+          toLevel={transitionInfo?.toLevel || ''}
+        />
+      )}
     </div>
   );
 }
