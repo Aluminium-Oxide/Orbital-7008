@@ -136,7 +136,7 @@ export const EA: Building = {
         image: "/EA03.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes:[
-        {id: "LT7", x: 1307, y: 1273},
+        {id: "EA-03-LT7", x: 1307, y: 1273},
         {id: "EA-03-02", x: 596, y: 580},
         {id: "EA-03-04", x: 694, y: 537},
         {id: "EA-03-05", x: 753, y: 537},
@@ -151,6 +151,7 @@ export const EA: Building = {
         {id: "EA-03-node2", x: 1664, y: 691},
         {id: "EA-03-node3", x: 1483, y: 870},
         {id: "EA-03-node4", x: 1307, y: 870},
+        {id: "EA-03-node5", x: 368, y: 791},
       ], 
        edges:[
         //lifts
@@ -180,6 +181,7 @@ export const EA: Building = {
         { from: "EA-03-node3", to: "EA-03-node4", distance: 176 },
         { from: "EA-03-node4", to: "EA-03-11", distance: 140 },
         { from: "EA-03-11", to: "EA-03-LT7", distance: 263 },
+        { from: "EA-03-02", to: "EA-03-node5", distance: 107 },
         //backwards 
         { from: "EA-03-LT7", to: "EA-03-11", distance: 263 },
         { from: "EA-03-11", to: "EA-03-node4", distance: 140 },
@@ -190,12 +192,12 @@ export const EA: Building = {
         { from: "EA-03-10", to: "EA-03-node1", distance: 72 },
         { from: "EA-03-lift1", to: "EA-03-node1", distance: 97 },
         { from: "EA-03-node1", to: "EA-03-09", distance: 267 },
-        { from: "EA-03-09", to: "EA-03-08", distance: 114 },
-        { from: "EA-03-08", to: "EA-03-07", distance: 79 },
+        { from: "EA-03-09", to: "EA-03-07", distance: 193 },
         { from: "EA-03-07", to: "EA-03-06", distance: 46 },
         { from: "EA-03-06", to: "EA-03-05", distance: 224 },
         { from: "EA-03-05", to: "EA-03-04", distance: 59 },
-        { from: "EA-03-04", to: "EA-03-02", distance: 0 }]},
+        { from: "EA-03-04", to: "EA-03-02", distance: 107 },
+        { from: "EA-03-node5", to: "EA-03-02", distance: 107 }]},
              
       "04": {
         image: "/EA04.png",

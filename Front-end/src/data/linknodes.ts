@@ -1,4 +1,6 @@
 export const LINK_NODE_IDS = [
+  "EA-03-node5",
+  "E1A-01-node1",
   "EA-06-node4",
   "E1A-03-node2",
   "EA-07-node7",

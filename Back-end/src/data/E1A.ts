@@ -10,6 +10,7 @@ export const E1A: Building = {
                 {id: "E1A-01-05", x: 680, y: 1043},
                 {id: "E1A-01-06", x: 680, y: 799},
                 {id: "E1A-01-lift1", x: 680, y: 1162},
+                {id: "E1A-01-node1", x: 352, y: 1043},
             ],
             edges: [
                 //lifts
@@ -22,9 +23,11 @@ export const E1A: Building = {
                 //forwards
                 {from: "E1A-01-lift1", to: "E1A-01-05", distance: 119},
                 {from: "E1A-01-05", to: "E1A-01-06", distance: 244},
+                {from: "E1A-01-05", to: "E1A-01-node1", distance: 328},
                 //backwards
                 {from: "E1A-01-06", to: "E1A-01-05", distance: 244},
-                {from: "E1A-01-05", to: "E1A-01-lift1", distance: 119}]},
+                {from: "E1A-01-05", to: "E1A-01-lift1", distance: 119},
+                {from: "E1A-01-node1", to: "E1A-01-05", distance: 328}]},
             
             "02": {
         image: "/E1A02.png",

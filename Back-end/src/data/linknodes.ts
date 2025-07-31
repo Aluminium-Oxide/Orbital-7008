@@ -1,4 +1,7 @@
 export const linkNodes = [
+  {id: "EA-03-node5", x: 368, y: 791, building: "EA", level: "03"},
+  {id: "E1A-01-node1", x: 352, y: 1043, building: "E1A", level: "01"},
+
   { id: "EA-06-node7", x: 124, y: 1051, building: "EA", level: "06" },
   { id: "E1A-03-node2", x: 272, y: 1219, building: "E1A", level: "03" },
 
@@ -31,6 +34,7 @@ export const linkNodes = [
 ];
 
 export const interlinkEdges = [
+  { from: "EA-03-node5", to: "E1A-01-node1", weight: 1 },
   { from: "EA-06-node5", to: "E1A-03-node2", weight: 1 },
   { from: "EA-07-node4", to: "E1A-04-node4", weight: 1 },
   
