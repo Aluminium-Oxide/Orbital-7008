@@ -401,6 +401,7 @@ function App() {
                 <li>Click on building names to view the floor plan of each building</li>
                 <li>Select start and destination location to check the shortest route between the two locations</li>
                 <li>More features coming soon...</li>
+                <li>Disclaimer: All map and nodes drawn by hand may not be 100% accurate. </li>
               </ul>
               <div className="mt-4 text-right">
                 <button onClick={() => setShowHelp(false)} className="text-blue-600 hover:underline">

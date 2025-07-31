@@ -81,13 +81,6 @@ const NodeImageIcon = (imageUrl: string, zoom: number): L.DivIcon => {
   });
 };
 
-const highlightIcon = L.divIcon({
-  className: 'highlight-node',
-  html: `<div style="background:#ff0;border:2px solid #f00;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;"><span style='color:#f00;font-weight:bold;'>★</span></div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 24],
-});
-
 const startPointIcon = L.divIcon({
   className: 'start-point-icon',
   html: `
@@ -420,7 +413,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
             position={node.position}
             icon={
               startNode === node.id ? startPointIcon :
-              highlightNode === node.id ? highlightIcon : 
               NodeImageIcon("/map/1.png", zoomLevel)
             }
           >
