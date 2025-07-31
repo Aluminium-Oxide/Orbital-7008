@@ -3,6 +3,13 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap, Polyline } from 'react-leaflet';
 
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
 // Pixel CRS config
 const PixelProjection = {
   project: (latlng: L.LatLng) => L.point(latlng.lng, latlng.lat),
@@ -178,6 +185,25 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
     checkImage(floorImagePath).then(validPath => {
       console.log("Loading floorplan:", validPath);
     });
+  }, [navigationMode, destination, currentFloor]);
+
+  useEffect(() => {
+    if (!navigationMode) {
+      const img = new Image();
+      img.onload = () => {
+        console.log('Main map image preloaded successfully');
+        setMapError(null);
+      };
+      img.onerror = () => {
+        console.error('Failed to preload main map image');
+        setMapError('Failed to preload main map image');
+      };
+      img.src = '/CDEmap.png';
+    }
+  }, [navigationMode]);
+
+  useEffect(() => {
+    if (!navigationMode || !destination || !currentFloor) return;
 
     import('../services/buildingService').then(({ BuildingService }) => {
       BuildingService.getBuilding(destination)
@@ -233,9 +259,22 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
 
   const floorImageUrl = `/map/${destination}${currentFloor}.png`;
   console.log('MapComponent props:', { destination, currentFloor, floorImageUrl });
+  
+  const [mapError, setMapError] = useState<string | null>(null);
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   return (
     <div className="relative h-[90vh] w-full base-map-container">
+      {isMapLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-[9999]">
+          <div className="text-lg font-semibold">Loading map...</div>
+        </div>
+      )}
+      {mapError && (
+        <div className="absolute top-4 left-4 bg-red-500 text-white px-4 py-2 rounded-lg z-[9999]">
+          Map Error: {mapError}
+        </div>
+      )}
       {navigationMode && clickedCoordinates && (
         <div className="absolute top-4 right-4 bg-black bg-opacity-90 text-white px-3 py-2 rounded-lg z-[9999] font-mono text-sm shadow-lg border border-gray-600">
           <div className="font-bold mb-1">coordinate clicked</div>
@@ -290,6 +329,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
         maxBounds={dynamicBounds}
         maxBoundsViscosity={1.0}
         style={{ height: '100%', width: '100%', zIndex: '1' }}
+        whenReady={() => {
+          setIsMapLoading(false);
+          setMapError(null);
+        }}
       >
         {navigationMode ? (
           <ImageOverlay
@@ -300,12 +343,32 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
                [currentLevelData.bounds[1][0], currentLevelData.bounds[1][1]]] : 
               [[0, 0], [floorMapHeight, floorMapWidth]]}
             interactive={true}
+            eventHandlers={{
+              load: () => {
+                console.log('Floor image loaded successfully:', floorImageUrl);
+                setMapError(null);
+              },
+              error: (e) => {
+                setMapError(`Failed to load floor image: ${floorImageUrl}`);
+                console.error(`Failed to load floor image: ${floorImageUrl}`, e);
+              }
+            }}
           />
         ) : (
           <ImageOverlay
             url="/CDEmap.png"
             bounds={[[0, 0], [mapHeight, mapWidth]]}
             interactive={true}
+            eventHandlers={{
+              load: () => {
+                console.log('Main map image loaded successfully');
+                setMapError(null);
+              },
+              error: (e) => {
+                setMapError('Failed to load main map image');
+                console.error('Failed to load main map image:', e);
+              }
+            }}
           />
         )}
 

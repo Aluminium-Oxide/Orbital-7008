@@ -5,10 +5,12 @@ import { linkNodes, interlinkEdges } from '../data/linknodes';
 const router = Router();
 
 interface PathRequestBody {
-  building: string;
+  building?: string;
   level?: string;
   from: string;
   to: string;
+  toBuilding?: string;
+  toLevel?: string;
 }
 
 // Dijkstra
@@ -146,23 +148,46 @@ function getAllNodesAndEdges() {
 }
 
 router.post('/', (req: Request, res: Response): void => {
-  const { from, to } = req.body;
+  const { from, to, building, level, toBuilding, toLevel } = req.body;
   if (!from || !to) {
     res.status(400).json({ error: 'important parameter lacking: from, to' });
     return;
   }
+  
+  console.log('Path request:', { from, to, building, level, toBuilding, toLevel });
+  
   const { allNodes, allEdges } = getAllNodesAndEdges();
+  
+  // Log available nodes for debugging
+  console.log('Available nodes count:', allNodes.length);
+  console.log('Available edges count:', allEdges.length);
+  
   if (!allNodes.includes(from)) {
-    res.status(400).json({ error: `starting point '${from}' not found`, availableNodes: allNodes });
+    res.status(400).json({ 
+      error: `starting point '${from}' not found`, 
+      availableNodes: allNodes.slice(0, 20), // Show first 20 nodes for debugging
+      totalNodes: allNodes.length
+    });
     return;
   }
   if (!allNodes.includes(to)) {
-    res.status(400).json({ error: `destination '${to}' not found`, availableNodes: allNodes });
+    res.status(400).json({ 
+      error: `destination '${to}' not found`, 
+      availableNodes: allNodes.slice(0, 20), // Show first 20 nodes for debugging
+      totalNodes: allNodes.length
+    });
     return;
   }
+  
   const result = dijkstra(allNodes, allEdges, from, to);
   if (!result) {
-    res.status(400).json({ error: ' no path found', from, to });
+    res.status(400).json({ 
+      error: 'no path found', 
+      from, 
+      to,
+      availableNodes: allNodes.slice(0, 20),
+      totalNodes: allNodes.length
+    });
     return;
   }
   

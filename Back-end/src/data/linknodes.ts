@@ -1,5 +1,5 @@
 export const linkNodes = [
-  { id: "EA-06-node5", x: 136, y: 1051, building: "EA", level: "06" },
+  { id: "EA-06-node7", x: 124, y: 1051, building: "EA", level: "06" },
   { id: "E1A-03-node2", x: 272, y: 1219, building: "E1A", level: "03" },
 
   { id: "EA-07-node4", x: 128, y: 1071, building: "EA", level: "07" },

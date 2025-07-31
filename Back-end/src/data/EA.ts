@@ -329,6 +329,10 @@ export const EA: Building = {
           {id:"EA-06-node2", x: 1672, y: 674},
           {id:"EA-06-node3", x: 1536, y: 843},
           {id:"EA-06-node4", x: 1068, y: 835},
+          {id:"EA-06-node5", x: 492, y: 568},
+          {id:"EA-06-node6", x: 544, y: 612},
+          {id:"EA-06-node7", x: 124, y: 1051},
+          
         ],
         edges: [
           //lifts
@@ -365,16 +369,19 @@ export const EA: Building = {
           {from: "EA-06-20", to: "EA-06-node4", distance: 164},
           {from: "EA-06-node4", to: "EA-06-21", distance: 153},
           {from: "EA-06-21", to: "EA-06-study room", distance: 325},
+          {from: "EA-06-node5", to: "EA-06-02", distance: 85},
+          {from: "EA-06-node6", to: "EA-06-node5", distance: 68},
+          {from: "EA-06-node7", to: "EA-06-node6", distance: 608},
           //backwards
-          {from: "EA-06-15", to: "EA-06-02", distance: 0},
+          {from: "EA-06-15", to: "EA-06-02", distance: 1},
           {from: "EA-06-03", to: "EA-06-02", distance: 138},
-          {from: "EA-06-14", to: "EA-06-03", distance: 0},
+          {from: "EA-06-14", to: "EA-06-03", distance: 1},
           {from: "EA-06-04", to: "EA-06-03", distance: 116},
-          {from: "EA-06-13", to: "EA-06-04", distance: 0},
+          {from: "EA-06-13", to: "EA-06-04", distance: 1},
           {from: "EA-06-05", to: "EA-06-04", distance: 128},
-          {from: "EA-06-12", to: "EA-06-05", distance: 0},
+          {from: "EA-06-12", to: "EA-06-05", distance: 1},
           {from: "EA-06-06", to: "EA-06-05", distance: 142},
-          {from: "EA-06-11", to: "EA-06-06", distance: 0},
+          {from: "EA-06-11", to: "EA-06-06", distance: 1},
           {from: "EA-06-07", to: "EA-06-06", distance: 138},
           {from: "EA-06-lift1", to: "EA-06-07", distance: 282},
           {from: "EA-06-node1", to: "EA-06-lift1", distance: 67},
@@ -387,6 +394,9 @@ export const EA: Building = {
           {from: "EA-06-node4", to: "EA-06-20", distance: 164},
           {from: "EA-06-21", to: "EA-06-node4", distance: 153},
           {from: "EA-06-study room", to: "EA-06-21", distance: 325},
+          {from: "EA-06-02", to: "EA-06-node5", distance: 85},
+          {from: "EA-06-node5", to: "EA-06-node6", distance: 68},
+          {from: "EA-06-node6", to: "EA-06-node7", distance: 608},
         ]
       },
 
@@ -400,6 +410,7 @@ export const EA: Building = {
           {id: "EA-07-node1", x: 540, y: 627},
           {id: "EA-07-node2", x: 476, y: 567},
           {id: "EA-07-node3", x: 580, y: 452},
+          {id: "EA-07-node4", x: 108, y: 1067}, 
         ],
         edges: [
           //lifts
@@ -415,13 +426,14 @@ export const EA: Building = {
           {from: "EA-07-node3", to: "EA-07-3~25", distance: 608},
           {from: "EA-07-3~25", to: "EA-07-lift1", distance: 276},
           {from: "EA-07-lift1", to: "EA-07-26", distance: 83},
+          {from: "EA-07-node1", to: "EA-07-node4", distance: 617},
           //backwards
           {from: "EA-07-node2", to: "EA-07-node1", distance: 88},
           {from: "EA-07-node3", to: "EA-07-node2", distance: 155},
           {from: "EA-07-3~25", to: "EA-07-node3", distance: 608},
           {from: "EA-07-lift1", to: "EA-07-3~25", distance: 276},
           {from: "EA-07-26", to: "EA-07-lift1", distance: 83},
-
+          {from: "EA-07-node4", to: "EA-07-node1", distance: 617},
         ]
       }
     }
