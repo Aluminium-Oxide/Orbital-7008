@@ -21,8 +21,8 @@ const TransitionModal: React.FC<TransitionModalProps> = ({
   const isLevelChange = fromLevel !== toLevel;
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
-      <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4 pointer-events-auto">
+    <div className="absolute left-1/2 transform -translate-x-1/2 scale-80 z-50 pointer-events-none"style={{ top: '35%' }}>
+      <div className="bg-white bg-opacity-90 rounded-lg shadow-xl p-6 max-w-md w-full mx-4 pointer-events-auto">
         <div className="text-center">
           <div className="mb-4">
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
@@ -32,14 +32,14 @@ const TransitionModal: React.FC<TransitionModalProps> = ({
             </div>
           </div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">
-            {isBuildingChange ? 'Pass through linkway' : 'Take lift'}
+            {isBuildingChange ? 'Pass through linkway' : 'Take lift/stairs'}
           </h2>
           <div className="mb-6">
             <div className="flex items-center justify-center space-x-4 mb-3">
               <div className="text-center">
                 <div className="text-sm text-gray-600 mb-1"> From </div>
                 <div className="bg-red-100 text-red-800 px-3 py-1 rounded-lg font-semibold">
-                  {fromBuilding}-L{fromLevel}
+                  {fromBuilding}-{fromLevel}
                 </div>
               </div>
               <div className="text-blue-600">
@@ -50,7 +50,7 @@ const TransitionModal: React.FC<TransitionModalProps> = ({
               <div className="text-center">
                 <div className="text-sm text-gray-600 mb-1"> To </div>
                 <div className="bg-green-100 text-green-800 px-3 py-1 rounded-lg font-semibold">
-                  {toBuilding}-L{toLevel}
+                  {toBuilding}-{toLevel}
                 </div>
               </div>
             </div>
