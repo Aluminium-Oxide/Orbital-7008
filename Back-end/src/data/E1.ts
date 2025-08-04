@@ -1,5 +1,3 @@
-//to be done: linkedge
-//completed: map 3.0, node fix
 import { Building } from './type';
 export const E1: Building = {
     name: "E1",
@@ -37,10 +35,10 @@ export const E1: Building = {
           {id: "E1-02-03", x: 980, y: 955},
           {id: "E1-02-04", x: 540, y: 955},
           {id: "E1-02-lift1", x: 1888, y: 855},
+          {id: "E1-02-stairs1", x: 1888, y: 403},
           {id: "E1-02-node1", x: 1888, y:691},
-          {id: "E1-02-node2", x: 1888, y: 403},
-          {id: "E1-02-node3", x: 1580, y: 691},
-          {id: "E1-02-node4", x: 1580, y: 951},
+          {id: "E1-02-node2", x: 1580, y: 691},
+          {id: "E1-02-node3", x: 1580, y: 951},
         ],
         edges: [
         //lifts
@@ -50,12 +48,13 @@ export const E1: Building = {
             {from: "E1-02-lift1", to:"E1-05-lift1", distance:5000},
             {from: "E1-02-lift1", to:"E1-06-lift1", distance:5000},
             {from: "E1-02-lift1", to:"E1-07-lift1", distance:5000},
+            {from: "E1-02-stairs1", to:"E1-03-stairs1", distance:5000},
         //forward
             {from: "E1-02-lift1", to: "E1-02-node1", distance: 54},
-            {from: "E1-02-node1", to: "E1-02-node3", distance: 117},
-            {from: "E1-02-node1", to: "E1-02-node2", distance: 313},
-            {from: "E1-02-node3", to: "E1-02-node4", distance: 274},
-            {from: "E1-02-node4", to: "E1-02-01", distance: 192},
+            {from: "E1-02-node1", to: "E1-02-node2", distance: 117},
+            {from: "E1-02-node1", to: "E1-02-stairs1", distance: 313},
+            {from: "E1-02-node2", to: "E1-02-node3", distance: 274},
+            {from: "E1-02-node3", to: "E1-02-01", distance: 192},
             {from: "E1-02-01", to: "E1-02-02", distance: 155},
             {from: "E1-02-02", to: "E1-02-03", distance: 236},
             {from: "E1-02-03", to: "E1-02-04", distance: 312},
@@ -63,10 +62,10 @@ export const E1: Building = {
             {from: "E1-02-04", to: "E1-02-03", distance: 312},
             {from: "E1-02-03", to: "E1-02-02", distance: 236},
             {from: "E1-02-02", to: "E1-02-01", distance: 155},
-            {from: "E1-02-01", to: "E1-02-node4", distance: 192},
-            {from: "E1-02-node4", to: "E1-02-node3", distance: 274},
-            {from: "E1-02-node3", to: "E1-02-node1", distance: 313},
-            {from: "E1-02-node2", to: "E1-02-node1", distance: 117},
+            {from: "E1-02-01", to: "E1-02-node3", distance: 192},
+            {from: "E1-02-node3", to: "E1-02-node2", distance: 274},
+            {from: "E1-02-node2", to: "E1-02-node1", distance: 313},
+            {from: "E1-02-stairs1", to: "E1-02-node1", distance: 117},
             {from: "E1-02-node1", to: "E1-02-lift1", distance: 54},]},
     "03":{
         image: "/E103.png",
@@ -79,13 +78,16 @@ export const E1: Building = {
           {id: "E1-03-05", x: 825, y: 1256},
           {id: "E1-03-06", x: 621, y: 1256},
           {id: "E1-03-lift1", x: 1884, y: 1163},
+          {id: "E1-03-stairs1", x: 1884, y:835},
           {id: "E1-03-node1", x: 1884, y:979},
           {id: "E1-03-node2", x: 1884, y: 900},
           {id: "E1-03-node3", x: 1976, y: 900},
           {id: "E1-03-node4", x: 1976, y: 415},
           {id: "E1-03-node5", x: 1584, y: 983},
           {id: "E1-03-node6", x: 1584, y: 1247},
-          {id: "E1-03-node7", x: 2093, y:423}
+          {id: "E1-03-node7", x: 2093, y:423},//TE L3
+          {id: "E1-03-node8", x: 1976, y:620},//E4 L4
+          {id: "E1-03-node9", x: 1884, y:620},
         ],
         edges: [
         //lift
@@ -99,7 +101,8 @@ export const E1: Building = {
             {from: "E1-03-lift1", to: "E1-03-node1", distance: 54},
             {from: "E1-03-node1", to: "E1-03-node2", distance: 117},
             {from: "E1-03-node2", to: "E1-03-node3", distance: 322},
-            {from: "E1-03-node3", to: "E1-03-node4", distance: 274},
+            {from: "E1-03-node3", to: "E1-03-node8", distance: 280},
+            {from: "E1-03-node8", to: "E1-03-node4", distance: 200},
             {from: "E1-03-node1", to: "E1-03-node5", distance: 274},
             {from: "E1-03-node5", to: "E1-03-node6", distance: 274},
             {from: "E1-03-node6", to: "E1-03-01", distance: 358},
@@ -108,12 +111,15 @@ export const E1: Building = {
             {from: "E1-03-03", to: "E1-03-04", distance: 80},
             {from: "E1-03-04", to: "E1-03-05", distance: 93},
             {from: "E1-03-05", to: "E1-03-06", distance: 204},
-            {from: "E1-03-node7", to: "E1-03-node2", distance: 573},
+            {from: "E1-03-node7", to: "E1-03-node4", distance: 573},
+            {from: "E1-03-node8", to: "E1-03-node9", distance: 90},
+            {from: "E1-03-node9", to: "E1-03-stairs1", distance: 10},
         //backwards
             {from: "E1-03-node1", to: "E1-03-lift1", distance: 54},
             {from: "E1-03-node2", to: "E1-03-node1", distance: 117},
             {from: "E1-03-node3", to: "E1-03-node2", distance: 322},
-            {from: "E1-03-node4", to: "E1-03-node3", distance: 274},
+            {from: "E1-03-node8", to: "E1-03-node3", distance: 280},
+            {from: "E1-03-node4", to: "E1-03-node8", distance: 200},
             {from: "E1-03-node5", to: "E1-03-node1", distance: 274},
             {from: "E1-03-node6", to: "E1-03-node5", distance: 274},
             {from: "E1-03-01", to: "E1-03-node6", distance: 358},
@@ -122,20 +128,24 @@ export const E1: Building = {
             {from: "E1-03-04", to: "E1-03-03", distance: 80},
             {from: "E1-03-05", to: "E1-03-04", distance: 93},
             {from: "E1-03-06", to: "E1-03-05", distance: 204},
-            {from: "E1-03-node2", to: "E1-03-node7", distance: 573},
+            {from: "E1-03-node4", to: "E1-03-node7", distance: 573},
+            {from: "E1-03-node9", to: "E1-03-node8", distance: 90},
+            {from: "E1-03-stairs1", to: "E1-03-node9", distance: 10},
             ]},
     "04":{
         image: "/E104.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
           {id: "E1-04-01", x: 1572, y: 550},
-          {id: "E1-04-02", x: 1004, y: 550},
+          {id: "E1-04-02", x: 1004, y: 550},//E2A B1
           {id: "E1-04-lift1", x: 1884, y: 1219},
           {id: "E1-04-node1", x: 1884, y:550},
           {id: "E1-04-node2", x: 1884, y: 316},
-          {id: "E1-04-node3", x: 1884, y: 80},
-          {id: "E1-04-node4", x: 2172, y: 316},
-          {id: "E1-04-node5", x: 196, y: 550},
+          {id: "E1-04-node3", x: 1884, y: 80},//E4 L4
+          {id: "E1-04-node4", x: 2172, y: 316},//Techno L3
+          {id: "E1-04-node5", x: 196, y: 550},//E1A L4
+          {id: "E1-04-node6", x: 400, y: 550},
+          {id: "E1-04-node7", x: 400, y: 350},//E2 B1
         ],
         edges: [
         //lift
@@ -149,18 +159,22 @@ export const E1: Building = {
             {from: "E1-04-lift1", to: "E1-04-node1", distance: 688},  
             {from: "E1-04-node1", to: "E1-04-01", distance: 312}, 
             {from: "E1-04-01", to: "E1-04-02", distance: 568}, 
-            {from: "E1-04-02", to: "E1-04-node5", distance: 835},
+            {from: "E1-04-node6", to: "E1-04-node5", distance: 235},
             {from: "E1-04-node1", to: "E1-04-node2", distance: 215},
             {from: "E1-04-node2", to: "E1-04-node3", distance: 236},
             {from: "E1-04-node2", to: "E1-04-node4", distance: 288},
+            {from: "E1-04-02", to: "E1-04-node6", distance: 600},
+            {from: "E1-04-node6", to: "E1-04-node7", distance: 200},
         //backwards
             {from: "E1-04-node1", to: "E1-04-lift1", distance: 688},
             {from: "E1-04-01", to: "E1-04-node1", distance: 312},
             {from: "E1-04-02", to: "E1-04-01", distance: 568},
-            {from: "E1-04-node5", to: "E1-04-02", distance: 835},
+            {from: "E1-04-node5", to: "E1-04-node6", distance: 235},
             {from: "E1-04-node2", to: "E1-04-node1", distance: 215},
             {from: "E1-04-node3", to: "E1-04-node2", distance: 236},
             {from: "E1-04-node4", to: "E1-04-node2", distance: 288},
+            {from: "E1-04-node6", to: "E1-04-02", distance: 600},
+            {from: "E1-04-node7", to: "E1-04-node6", distance: 200},
             ]},
     "05":{
         image: "/E105.png",
@@ -170,10 +184,10 @@ export const E1: Building = {
           {id: "E1-05-10~15", x: 500, y: 807},
           {id: "E1-05-16~31", x: 1220, y: 807},
           {id: "E1-05-lift1", x: 1948, y: 1263},
-          {id: "E1-05-lift2", x: 500, y: 436},
+          {id: "E1-05-lift2", x: 500, y: 436},//E2 L1
           {id: "E1-05-node1", x: 1948, y:807},
           {id: "E1-05-node2", x: 500, y: 679},
-          {id: "E1-05-node3", x: 220, y: 679},
+          {id: "E1-05-node3", x: 220, y: 679},//E1A L5
         ],
         edges: [
         //lift
@@ -224,9 +238,9 @@ export const E1: Building = {
           {id: "E1-06-15", x: 1636, y: 835},
           {id: "E1-06-16", x: 1840, y: 835},
           {id: "E1-06-lift1", x: 2000, y: 1260},
-          {id: "E1-06-lift2", x: 560, y: 450},
+          {id: "E1-06-lift2", x: 560, y: 450},//E2 L2
           {id: "E1-06-node1", x: 2000, y:835},
-          {id: "E1-06-node2", x: 2000, y:619},
+          {id: "E1-06-node2", x: 2000, y:619},//E4 L6
         ],
         edges: [
         //lift
@@ -291,7 +305,7 @@ export const E1: Building = {
             {id: "E1-07-24", x: 1516, y: 818},
             {id: "E1-07-25/26", x: 1980, y: 818},
             {id: "E1-07-lift1", x: 1980, y: 1150},
-            {id: "E1-07-lift2", x:550, y: 444},],
+            {id: "E1-07-lift2", x:550, y: 444},],//E2L3
         edges: [
         //lift
         {from: "E1-07-lift1", to:"E1-01-lift1", distance:5000},
@@ -333,7 +347,7 @@ export const E1: Building = {
             {id: "E1-08-23", x: 1667, y: 835},
             {id: "E1-08-24", x: 1768, y: 835},
             {id: "E1-08-25", x: 1980, y: 835},
-            {id: "E1-08-lift1", x: 571, y: 444},
+            {id: "E1-08-lift1", x: 571, y: 444},//E2 L4
             {id: "E1-08-stairs1", x: 1980, y: 1093},
             {id: "E1-08-node1", x: 571, y: 348},
            ],

@@ -1,5 +1,3 @@
-//to be done: node fix, linkedge
-//completed: map 3.0
 import { Building } from './type';
 
 export const E2: Building = {
@@ -10,11 +8,8 @@ export const E2: Building = {
             image: "/E2B2.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
-                {id: "E2-B2-node1", x: 1412, y: 550},
-                {id: "E2-B2-node2", x: 1196, y: 550},
-                {id: "E2-B2-node3", x: 1196, y: 411},
                 {id: "E2-B2-stairs1", x: 1036, y: 1003},
-                {id: "E2-B2-node4", x: 1036, y: 1275},
+                {id: "E2-B2-node1", x: 1036, y: 1275},//LT7,E3L5
                 ],
             edges: [
                 //lift
@@ -25,13 +20,9 @@ export const E2: Building = {
                 {from: "E2-B2-stairs1", to: "E2-04-stairs1", distance: 6000},
                 {from: "E2-B2-stairs1", to: "E2-05-stairs1", distance: 6000},
                 //forwards
-                {from: "E2-B2-node1", to: "E2-B2-node2", distance: 230},
-                {from: "E2-B2-node2", to: "E2-B2-node3", distance: 140},
-                {from: "E2-B2-stairs1", to: "E2-B2-node4", distance: 270},
+                {from: "E2-B2-stairs1", to: "E2-B2-node1", distance: 270},
                 //backwards
-                {from: "E2-B2-node2", to: "E2-B2-node1", distance: 230},
-                {from: "E2-B2-node3", to: "E2-B2-node2", distance: 140},
-                {from: "E2-B2-node4", to: "E2-B2-stairs1", distance: 270},
+                {from: "E2-B2-node1", to: "E2-B2-stairs1", distance: 270},
             ]},
         "B1":{
             image: "/E2B1.png",
@@ -41,11 +32,13 @@ export const E2: Building = {
                 {id: "E2-B1-02", x: 1400, y: 780},
                 {id: "E2-B1-03", x: 1520, y: 780},
                 {id: "E2-B1-node1", x: 1620, y: 780},
-                {id: "E2-B1-node2", x: 1620, y: 371},
+                {id: "E2-B1-node2", x: 1620, y: 371},//E1A L4
                 {id: "E2-B1-node3", x: 1200, y: 780},
                 {id: "E2-B1-stairs2", x: 760, y: 780},
                 {id: "E2-B1-01", x: 1000, y: 780},
-                {id: "E2-B1-LT1", x: 1200, y:1100},],
+                {id: "E2-B1-LT1", x: 1200, y:1100},
+                {id: "E2-B1-node4", x: 1200, y:1370},//E3 L6
+            ],
             edges: [
                 //lift
                 {from: "E2-B1-stairs1", to: "E2-B2-stairs1", distance: 6000},
@@ -64,6 +57,7 @@ export const E2: Building = {
                 { from: "E2-B1-node3", to: "E2-B1-01", distance: 200 },
                 { from: "E2-B1-node3", to: "E2-B1-LT1", distance: 320 },
                 { from: "E2-B1-01", to: "E2-B1-stairs2", distance: 240 },
+                { from: "E2-B1-node4", to: "E2-B1-LT1", distance: 270 },
                 //backwards
                 {from: "E2-B1-02", to: "E2-B1-stairs1", distance: 180},
                 {from: "E2-B1-03", to: "E2-B1-02", distance: 120},
@@ -73,14 +67,15 @@ export const E2: Building = {
                 {from: "E2-B1-01", to: "E2-B1-node3", distance: 200},
                 {from: "E2-B1-LT1", to: "E2-B1-node3", distance: 320},
                 { from: "E2-B1-stairs2", to: "E2-B1-01", distance: 240 },
-]},
+                { from: "E2-B1-LT1", to: "E2-B1-node4", distance: 270 },
+            ]},
             "01":{
         image: "/E201.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
-                {id: "E2-01-lift1", x: 480, y: 340},
+                {id: "E2-01-lift1", x: 480, y: 340},//E1 L5
                 {id: "E2-01-node1", x: 480, y: 460},
-                {id: "E2-01-node2", x: 720, y: 450},
+                {id: "E2-01-node2", x: 720, y: 450},//EA L3
                 {id: "E2-01-node3", x: 480, y: 780},
                 {id: "E2-01-01~04", x: 930, y: 780},
                 {id: "E2-01-node4", x: 1200, y: 780},
@@ -92,10 +87,10 @@ export const E2: Building = {
                 {id: "E2-01-LT2", x: 1200, y: 1050},
                 {id: "E2-01-node6", x: 480, y: 920},
                 {id: "E2-01-node7", x: 555, y: 920},
-                {id: "E2-01-node8", x: 555, y: 1147},
+                {id: "E2-01-node8", x: 555, y: 1147},//E4 L4 arise and shine
                 {id: "E2-01-node9", x: 480, y: 1000},
-                {id: "E2-01-node10", x: 188, y: 1000},
-                {id: "E2-01-node11", x: 480, y: 1387},
+                {id: "E2-01-node10", x: 188, y: 1000},//E4 L4 LT6
+                {id: "E2-01-node11", x: 480, y: 1387},//E4 L5
                 {id: "E2-01-node12", x: 1200, y: 850},
                 {id: "E2-01-stairs2", x: 800, y: 850},
                 {id: "E2-01-stairs3", x: 1400, y: 850},
@@ -161,11 +156,11 @@ export const E2: Building = {
         image: "/E202.png",
             bounds: [[0, 0], [1640, 2360]],
             nodes:[
-                {id: "E2-02-lift1", x: 520, y: 370},
+                {id: "E2-02-lift1", x: 520, y: 370},//E1 L6
                 {id: "E2-02-38/39", x: 520, y: 720},
                 {id: "E2-02-node1", x: 520, y: 770},
                 {id: "E2-02-34~37", x: 441, y: 770},
-                {id: "E2-02-node2", x: 100, y: 770},
+                {id: "E2-02-node2", x: 100, y: 770},//E2A L1
                 {id: "E2-02-01~07", x: 650, y: 720},
                 {id: "E2-02-29~32", x: 850, y: 720},
                 {id: "E2-02-node3", x: 1064, y: 720},
@@ -178,7 +173,8 @@ export const E2: Building = {
                 {id: "E2-02-node6", x: 650, y: 860},
                 {id: "E2-02-stairs2", x: 930, y: 860},
                 {id: "E2-02-LT2", x: 650, y: 1200},
-                {id: "E2-02-node7", x: 650, y: 1400},],
+                {id: "E2-02-node7", x: 650, y: 1400},//E4 L6
+            ],
             edges: [
                 //lift
                 {from: "E2-02-stairs1", to: "E2-B2-stairs1", distance: 6000},
@@ -313,7 +309,7 @@ export const E2: Building = {
                 {id: "E2-05-lift1", x: 1100,y: 550},
                 {id: "E2-05-25~28", x: 1100, y: 780},
                 {id: "E2-05-14~23", x: 1100, y: 915},
-                {id: "E2-05-node1", x: 604, y: 915},
+                {id: "E2-05-node1", x: 604, y: 915},//E2A L4
                 {id: "E2-05-01~13", x: 1372, y: 915},
                 ],
             edges: [
