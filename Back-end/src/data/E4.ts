@@ -1,8 +1,8 @@
 import { Building } from './type';
 
 export const E4: Building = {
-    name: "EA",
-    floors: 7,
+    name: "E4",
+    floors: 8,
     levels: {
         "01":{
         image: "/E4L1.png",

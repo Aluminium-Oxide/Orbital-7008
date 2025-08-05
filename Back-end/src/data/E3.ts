@@ -1,7 +1,7 @@
 import { Building } from './type';
 
 export const E3: Building = {
-    name: "EA",
+    name: "E3",
     floors: 6,
     levels: {
         "01":{
@@ -253,8 +253,5 @@ export const E3: Building = {
     {from: "E3-06-node2", to: "E3-06-node1", distance: 157},
     {from: "E3-06-node1", to: "E3-06-lift1", distance: 361}
         ]},
-    }    
-        
-        
-        
+    }         
     }

@@ -6,6 +6,7 @@ import { E2 } from './E2';
 import { E2A } from './E2A';
 import { E3 } from './E3';
 import { E4 } from './E4';
+import { Techno_Edge } from './Techno_Edge';
 
 export const buildingData: Record<string, Building> = {
   EA,
@@ -15,4 +16,5 @@ export const buildingData: Record<string, Building> = {
   E2A,
   E3,
   E4,
+  Techno_Edge,
 };

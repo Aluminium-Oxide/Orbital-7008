@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap, Polyline } from 'react-leaflet';
+import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, Polyline } from 'react-leaflet';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -122,7 +122,7 @@ const buildings: Building[] = [
   { id: 14, name: "SDE2", x: 536, y: 1559 },
   { id: 15, name: "SDE3", x: 276, y: 1243 },
   { id: 16, name: "SDE4", x: 160, y: 1727 },
-  { id: 17, name: "Techno", x: 697, y: 1239 },
+  { id: 17, name: "Techno_Edge", x: 697, y: 1239 },
   { id: 18, name: "T-Lab", x: 957, y: 452 },
   { id: 19, name: "EW1", x: 381, y: 1013 },
 ];
