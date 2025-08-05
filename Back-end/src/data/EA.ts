@@ -183,7 +183,7 @@ export const EA: Building = {
         { from: "EA-03-node4", to: "EA-03-11", distance: 140 },
         { from: "EA-03-11", to: "EA-03-LT7", distance: 263 },
         { from: "EA-03-02", to: "EA-03-node5", distance: 107 },
-        { from: "EA-03-node5", to: "EA-03-node6", distance: 400 },
+        { from: "EA-03-node5", to: "EA-03-node6", distance: 40000 },
         //backwards 
         { from: "EA-03-LT7", to: "EA-03-11", distance: 263 },
         { from: "EA-03-11", to: "EA-03-node4", distance: 140 },
@@ -200,7 +200,7 @@ export const EA: Building = {
         { from: "EA-03-05", to: "EA-03-04", distance: 59 },
         { from: "EA-03-04", to: "EA-03-02", distance: 107 },
         { from: "EA-03-node5", to: "EA-03-02", distance: 107 },
-        { from: "EA-03-node6", to: "EA-03-node5", distance: 400 },
+        { from: "EA-03-node6", to: "EA-03-node5", distance: 10000 },
       ]},
              
       "04": {

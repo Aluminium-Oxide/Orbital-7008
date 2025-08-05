@@ -12,45 +12,39 @@ export const linkNodes = [
   {id: "E1-04-node5", x: 196, y: 550, building: "E1", level: "04"},//E1A L4
   {id: "E1A-04-node6", x: 2240, y: 670, building: "E1A", level: "04"},//E1 L4
 //5
-  {id: "E1-05-node3", x: 220, y: 679},//E1A L5
-  {id: "E1A-05-node2", x: 2288, y: 411},//E1 L5
+  {id: "E1-05-node3", x: 220, y: 679, building: "E1", level: "05"},//E1A L5
+  {id: "E1A-05-node2", x: 2288, y: 411, building: "E1A", level: "05"},//E1 L5
 //6
-  {id: "E1A-04-node5", x: 686, y: 280},//E2 B1
-  {id: "E2-B1-node2", x: 1620, y: 371},//E1A L4
+  {id: "E1A-04-node5", x: 686, y: 280, building: "E1A", level: "04"},//E2 B1
+  {id: "E2-B1-node2", x: 1620, y: 371, building: "E2", level: "B1"},//E1A L4
 //7
-  {id: "E1-05-lift2", x: 500, y: 436},//E2 L1
-  {id: "E2-01-lift1", x: 480, y: 340},//E1 L5
+  {id: "E1-05-lift2", x: 500, y: 436, building: "E1", level: "05"},//E2 L1
+  {id: "E2-01-lift1", x: 480, y: 340, building: "E2", level: "01"},//E1 L5
 //8
   {id: "E2-01-node2", x: 720, y: 450, building: "E2", level: "01"},//EA L3
   {id: "EA-03-node6", x: 400, y: 1200, building: "EA", level: "03"},//E2 L1
 
 //9
-  {id: "E1-06-lift2", x: 560, y: 450},//E2 L2
-  {id: "E2-02-lift1", x: 520, y: 370},//E1 L6
+  {id: "E1-06-lift2", x: 560, y: 450, building: "E1", level: "06"},//E2 L2
+  {id: "E2-02-lift1", x: 520, y: 370, building: "E2", level: "02"},//E1 L6
 //10
-  {id: "E2-02-node2", x: 100, y: 770},//E2A L1
-  {id: "E2A-01-node11", x: 2100, y: 650},//E2 L2
+  {id: "E2-02-node2", x: 100, y: 770, building: "E2", level: "02"},//E2A L1
+  {id: "E2A-01-node11", x: 2100, y: 650, building: "E2A", level: "01"},//E2 L2
 //11
-  {id: "E1-07-lift2", x:550, y: 444},//E2 L3
-  {id: "E2-03-lift1", x: 524, y: 612},//E1 L7
+  {id: "E1-07-lift2", x:550, y: 444, building: "E1", level: "07"},//E2 L3
+  {id: "E2-03-lift1", x: 524, y: 612, building: "E2", level: "03"},//E1 L7
 //12
-  {id: "E2-03-node4", x: 124, y: 876},//E2A L2
-  {id: "E2A-02-node2", x: 1939, y: 625},//E2 L3
+  {id: "E2-03-node4", x: 124, y: 876, building: "E2", level: "03"},//E2A L2
+  {id: "E2A-02-node2", x: 1939, y: 625, building: "E2A", level: "02"},//E2 L3
 //13
-  {id: "E2-05-node1", x: 604, y: 915},//E2A L4
-  {id: "E2A-04-node2", x: 1980, y: 635},//E2 L5
+  {id: "E2-05-node1", x: 604, y: 915, building: "E2", level: "05"},//E2A L4
+  {id: "E2A-04-node2", x: 1980, y: 635, building: "E2A", level: "04"},//E2 L5
 //14
-  {id: "E2-01-node10", x: 188, y: 1000},//E4L4 road
-  {id: "E2A-01-node9", x: 1680, y: 1533},//E2B1/E4L4 road
+  {id: "E2-01-node10", x: 188, y: 1000, building: "E2", level: "01"},//E4L4 road
+  {id: "E2A-01-node9", x: 1680, y: 1533, building: "E2A", level: "01"},//E2B1/E4L4 road
 //15
   {id: "E1-04-02", x: 1004, y: 550, building: "E1", level: "04"},//E2A B1
   {id: "E2A-01-node1", x: 72, y: 982, building: "E2A", level: "01"},//E1|E4 L4 lift2 side
-
-
-
-
-
-
 
   //？
   {id: "E1-04-node7", x: 400, y: 350},//E2 B1 ??????????????????????????????????
