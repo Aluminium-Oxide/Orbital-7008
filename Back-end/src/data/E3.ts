@@ -5,7 +5,7 @@ export const E3: Building = {
     floors: 6,
     levels: {
         "01":{
-        image: "/E3L1.png",
+        image: "/E301.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
             {id: "E3-01-lift1", x: 893, y:1102},
