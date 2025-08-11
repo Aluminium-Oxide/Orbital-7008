@@ -370,7 +370,7 @@ function App() {
           currentFloor={segments.length > 0 ? segments[currentSegmentIdx].level : currentFloor}
           path={segments.length > 0 ? segments[currentSegmentIdx].nodes : []}
           highlightNode={highlightNode}
-          startNode={fromNode || null}
+          startNode={segments.length > 0 ? segments[currentSegmentIdx].from : (fromNode || null)}
         />
 
         {segments.length > 0 && (
@@ -416,10 +416,9 @@ function App() {
       <div className="shrink-0 z-50">
         {segments.length > 0 ? (
           <div className="bg-blue-500 text-white text-center py-2 flex justify-center items-center gap-6">
-            <span>Current segment: {segments[currentSegmentIdx].nodes.join(' → ')}</span>
             <span>building: {segments[currentSegmentIdx].building}</span>
             <span>floor: {segments[currentSegmentIdx].level}</span>
-            <span>no. {currentSegmentIdx + 1} / {segments.length}</span>
+            <span>segment no. {currentSegmentIdx + 1} / {segments.length}</span>
           </div>
         ) : (
           <div className="bg-blue-500 text-white text-center py-3 text-lg">

@@ -85,13 +85,24 @@ const startPointIcon = L.divIcon({
   className: 'start-point-icon',
   html: `
     <div style="
-      position: relative;
-      width: 32px;
-      height: 32px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     ">
+    <div style="
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 6px;
+        padding: 2px 4px;
+        color: red;
+        font-weight: bold;
+        font-size: 12px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      ">
+        You are here
+      </div>
       <svg width="32" height="32" viewBox="0 0 24 24" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" 
               fill="#ff0000" stroke="#ffffff" stroke-width="1.5"/>
@@ -100,8 +111,8 @@ const startPointIcon = L.divIcon({
       </svg>
     </div>
   `,
-  iconSize: [32, 32],
-  iconAnchor: [16, 32], 
+  iconSize: [50, 50],
+  iconAnchor: [25, 50], 
 });
 
 const buildings: Building[] = [
@@ -162,7 +173,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
     : { width: mapWidth, height: mapHeight };
 
   const dynamicCenter: [number, number] = [mapSize.height / 2, mapSize.width / 2];
-  const paddingRatio = 0.3;
+  const paddingRatio = navigationMode ? 0.8 : 0.5;
   const dynamicBounds: [[number, number], [number, number]] = [
     [-mapSize.height * paddingRatio, -mapSize.width * paddingRatio],
     [mapSize.height * (1 + paddingRatio), mapSize.width * (1 + paddingRatio)],
@@ -269,10 +280,18 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
     map.on('zoom', updateZoom);
     updateZoom();
 
+    if (navigationMode) {
+      map.setMaxBounds(dynamicBounds);
+      (map as any).options.maxBoundsViscosity = 0.2;
+    } else {
+      map.setMaxBounds(dynamicBounds);
+      (map as any).options.maxBoundsViscosity = 0.5;
+    }
+
     return () => {
       map.off('zoom', updateZoom);
     };
-  }, []);
+  }, [navigationMode,dynamicBounds]);
 
   const floorImageUrl = `/map/${destination}${currentFloor}.png`;
   console.log('MapComponent props:', { destination, currentFloor, floorImageUrl });
@@ -315,7 +334,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
       )}
       
       {selectedBuilding && !navigationMode && (
-        <div className="absolute top-0 right-0 h-full w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
+        <div className="absolute top-0 right-0 bottom-34 sm:bottom-34 w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
           <button
             className="absolute top-2 right-2 text-gray-500 hover:text-black"
             onClick={() => setSelectedBuilding(null)}
@@ -344,7 +363,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
         maxZoom={2}
         minZoom={initialZoom - 2}
         maxBounds={dynamicBounds}
-        maxBoundsViscosity={1.0}
+        maxBoundsViscosity={navigationMode? 0.2 : 0.5}
         style={{ height: '100%', width: '100%', zIndex: '1' }}
         whenReady={() => {
           setIsMapLoading(false);
