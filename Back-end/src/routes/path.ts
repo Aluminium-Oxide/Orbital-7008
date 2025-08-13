@@ -224,10 +224,10 @@ router.get('/nodes/:building', (req: Request, res: Response): void => {
 });
 
 router.get('/buildings', (req: Request, res: Response): void => {
-  const buildings = Object.keys(buildingData).map(name => ({
-    name,
-    floors: buildingData[name].floors,
-    levels: Object.keys(buildingData[name].levels)
+  const buildings = Object.keys(buildingData).map(key => ({
+    name: buildingData[key].name,
+    floors: buildingData[key].floors,
+    levels: Object.keys(buildingData[key].levels)
   }));
   
   res.json({

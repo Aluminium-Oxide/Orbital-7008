@@ -88,11 +88,11 @@ export const E1A: Building = {
                 //forwards
                 {from: "E1A-03-lift1", to: "E1A-03-node1", distance: 424},
                 {from: "E1A-03-node1", to: "E1A-03-03", distance: 168},
-                {from: "E1A-03-node1", to: "E1A-03-node2", distance: 300},
+                {from: "E1A-03-lift1", to: "E1A-03-node2", distance: 300},
                 //backwards
                 {from: "E1A-03-03", to: "E1A-03-node1", distance: 168},
                 {from: "E1A-03-node1", to: "E1A-03-lift1", distance: 424},
-                {from: "E1A-03-node2", to: "E1A-03-node1", distance: 300},]},
+                {from: "E1A-03-node2", to: "E1A-03-lift1", distance: 300},]},
 
             "04": {
         image: "/E1A04.png",

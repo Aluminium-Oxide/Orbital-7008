@@ -435,7 +435,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
               NodeImageIcon("/map/1.png", zoomLevel)
             }
           >
-            <Popup>{node.name}</Popup>
           </Marker>
         ))}
 

@@ -16,5 +16,5 @@ export const buildingData: Record<string, Building> = {
   E2A,
   E3,
   E4,
-  Techno_Edge,
+  TECHNO_EDGE: Techno_Edge,
 };
