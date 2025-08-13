@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, Polyline } from 'react-leaflet';
+import { useMapEvents, MapContainer, ImageOverlay, Marker, Popup, useMap, Polyline } from 'react-leaflet';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -30,12 +30,12 @@ const PixelCRS = L.Util.extend({}, L.CRS.Simple, {
   infinite: true,
 });
 
-function Coordinates({ onMapClick }: { onMapClick?: (coordinates: {x: number, y: number}) => void }) {
+function Coordinates({ onMapClick }: { onMapClick?: () => void }) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
       console.log('coordinate clicked:', lng, lat);
-      onMapClick?.({x: lng, y: lat});
+      onMapClick?.();
     }
   });
   return null;
@@ -81,34 +81,44 @@ const NodeImageIcon = (imageUrl: string, zoom: number): L.DivIcon => {
   });
 };
 
+const highlightIcon = L.divIcon({
+  className: 'highlight-node',
+  html: `<div style="background:#ff0;border:2px solid #f00;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;"><span style='color:#f00;font-weight:bold;'>★</span></div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 24],
+});
+
 const startPointIcon = L.divIcon({
   className: 'start-point-icon',
   html: `
     <div style="
+      position: relative;
+      width: 50px;
+      height: 50px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     ">
-    <div style="
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 6px;
-        padding: 2px 4px;
-        color: red;
-        font-weight: bold;
-        font-size: 12px;
-        margin-bottom: 2px;
-        white-space: nowrap;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      ">
-        You are here
-      </div>
-      <svg width="32" height="32" viewBox="0 0 24 24" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" 
-              fill="#ff0000" stroke="#ffffff" stroke-width="1.5"/>
-        <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="#ff0000" stroke-width="0.5"/>
-        <circle cx="10.5" cy="7.5" r="1" fill="rgba(255,255,255,0.8)"/>
-      </svg>
+      <div style="
+          background: rgba(255, 255, 255, 0.9);
+          border-radius: 6px;
+          padding: 2px 4px;
+          color: red;
+          font-weight: bold;
+          font-size: 12px;
+          margin-bottom: 2px;
+          white-space: nowrap;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        ">
+          You are here
+        </div>
+        <svg width="40" height="40" viewBox="0 0 24 24" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" 
+                fill="#ff0000" stroke="#ffffff" stroke-width="1.5"/>
+          <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="#ff0000" stroke-width="0.5"/>
+          <circle cx="10.5" cy="7.5" r="1" fill="rgba(255,255,255,0.8)"/>
+        </svg>
     </div>
   `,
   iconSize: [50, 50],
@@ -153,7 +163,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
 
   const [navigationMode, setNavigationMode] = useState(false);
   const [zoomLevel, setZoomLevel] = useState<number>(0);
-  const [clickedCoordinates, setClickedCoordinates] = useState<{x: number, y: number} | null>(null);
   const [currentLevelData, setCurrentLevelData] = useState<any>(null);
 
   const mapWidth = 1707;
@@ -311,27 +320,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
           Map Error: {mapError}
         </div>
       )}
-      {navigationMode && clickedCoordinates && (
-        <div className="absolute top-4 right-4 bg-black bg-opacity-90 text-white px-3 py-2 rounded-lg z-[9999] font-mono text-sm shadow-lg border border-gray-600">
-          <div className="font-bold mb-1">coordinate clicked</div>
-          <div>X: {Math.round(clickedCoordinates.x)}</div>
-          <div>Y: {Math.round(clickedCoordinates.y)}</div>
-          <div className="text-xs text-gray-300 mt-1">
-            <div>Leaflet format: [{Math.round(clickedCoordinates.y)}, {Math.round(clickedCoordinates.x)}]</div>
-          </div>
-          {currentLevelData && (
-            <div className="mt-2 text-xs text-gray-300">
-              <div>Bounds: {JSON.stringify(currentLevelData.bounds)}</div>
-            </div>
-          )}
-          <button 
-            onClick={() => setClickedCoordinates(null)}
-            className="mt-2 text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded"
-          >
-            cancel
-          </button>
-        </div>
-      )}
+
       
       {selectedBuilding && !navigationMode && (
         <div className="absolute top-0 right-0 bottom-34 sm:bottom-34 w-full bg-white z-[1000] p-4 overflow-y-auto sm:w-[300px] sm:rounded-none sm:shadow-lg">
@@ -408,10 +397,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
           />
         )}
 
-        <Coordinates onMapClick={(coordinates) => {
-          if (navigationMode) {
-            setClickedCoordinates(coordinates);
-          }
+        <Coordinates onMapClick={() => {
           setSelectedBuilding(null);
         }} />
 
@@ -432,10 +418,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
             position={node.position}
             icon={
               startNode === node.id ? startPointIcon :
+              highlightNode === node.id ? highlightIcon : 
               NodeImageIcon("/map/1.png", zoomLevel)
             }
-          >
-          </Marker>
+            interactive={false}
+          />
         ))}
 
         {navigationMode && path && path.length > 1 && (

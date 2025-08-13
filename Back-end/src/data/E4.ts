@@ -118,6 +118,7 @@ export const E4: Building = {
             {from: "E4-03-lift1", to: "E4-06-lift1", distance: 5000},
             {from: "E4-03-lift1", to: "E4-07-lift1", distance: 5000},
             {from: "E4-03-lift1", to: "E4-08-lift1", distance: 5000},
+            {from: "E4-03-node5", to: "E4-04-node16", distance: 5000},
             //forwards
             {from: "E4-03-node1", to: "E4-03-lift1", distance: 170},
             {from: "E4-03-lift1", to: "E4-03-node2", distance: 70},
@@ -152,11 +153,11 @@ export const E4: Building = {
         image: "/E304.png",
         bounds: [[0, 0], [1640, 2360]],
         nodes: [
-            {id: "E4-04-node1", x: 474, y: 196},//EA L3 远远的台阶
+            {id: "E4-04-node1", x: 474, y: 196},//EA L3 
             {id: "E4-04-node2", x: 548, y: 260},
             {id: "E4-04-node3", x: 612, y: 200},//E3 L6
             {id: "E4-04-node4", x: 568, y: 289},
-            {id: "E4-04-node5", x: 430, y: 413},//????
+            {id: "E4-04-node5", x: 430, y: 413},
             {id: "E4-04-node6", x: 660, y: 461},
             {id: "E4-04-02~04", x: 808, y: 611},
             {id: "E4-04-LT6", x: 996, y: 793},
@@ -192,6 +193,7 @@ export const E4: Building = {
             {from: "E4-04-lift2", to: "E4-06-lift2", distance: 5000},
             {from: "E4-04-lift2", to: "E4-07-lift2", distance: 5000},
             {from: "E4-04-lift2", to: "E4-08-lift2", distance: 5000},
+            {from: "E4-03-node5", to: "E4-04-node16", distance: 5000},
             //forward
             {from: "E4-04-node1", to: "E4-04-node2", distance: 98},
             {from: "E4-04-node2", to: "E4-04-node3", distance: 87},
