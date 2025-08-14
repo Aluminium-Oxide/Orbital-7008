@@ -80,7 +80,7 @@ function App() {
   const [pendingTransitionIdx, setPendingTransitionIdx] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/path/buildings')
+    fetch('https://orbital-7008-backend.onrender.com/api/path/buildings')
       .then(res => res.json())
       .then(data => setBuildings(data.buildings.map((b: any) => b.name)))
       .catch(() => setError('no back-end found'));
@@ -88,7 +88,7 @@ function App() {
 
   useEffect(() => {
     if (selectedBuilding) {
-      fetch(`http://localhost:3001/api/buildings/${selectedBuilding}`)
+      fetch(`https://orbital-7008-backend.onrender.com/api/buildings/${selectedBuilding}`)
         .then(res => res.json())
         .then(data => {
           setLevels(Object.keys(data.levels));
@@ -103,7 +103,7 @@ function App() {
 
   useEffect(() => {
     if (selectedBuilding && selectedLevel) {
-      fetch(`http://localhost:3001/api/path/nodes/${selectedBuilding}?level=${selectedLevel}`)
+      fetch(`https://orbital-7008-backend.onrender.com/api/path/nodes/${selectedBuilding}?level=${selectedLevel}`)
         .then(res => res.json())
         .then(data => {
           setNodes(data.nodes);
@@ -116,7 +116,7 @@ function App() {
 
   useEffect(() => {
     if (toBuilding) {
-      fetch(`http://localhost:3001/api/buildings/${toBuilding}`)
+      fetch(`https://orbital-7008-backend.onrender.com/api/buildings/${toBuilding}`)
         .then(res => res.json())
         .then(data => {
           setToLevels(Object.keys(data.levels));
@@ -130,7 +130,7 @@ function App() {
 
   useEffect(() => {
     if (toBuilding && toLevel) {
-      fetch(`http://localhost:3001/api/path/nodes/${toBuilding}?level=${toLevel}`)
+      fetch(`https://orbital-7008-backend.onrender.com/api/path/nodes/${toBuilding}?level=${toLevel}`)
         .then(res => res.json())
         .then(data => {
           setToNodes(data.nodes);
@@ -186,7 +186,7 @@ function App() {
     setError('');
     setPathResult(null);
     try {
-      const response = await fetch('http://localhost:3001/api/path', {
+      const response = await fetch('https://orbital-7008-backend.onrender.com/api/path', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -304,7 +304,7 @@ function App() {
       {currentPage === 'map' && (
         <div className="bg-blue-400 w-full shadow-md py-3 z-40 space-y-2">
           <div className="flex flex-row gap-2 px-5">
-            <div className="w-1/4 flex items-center text-white text-lg justify-center items-center font-medium">Start:</div>
+            <div className="w-1/4 flex items-center text-white text-lg justify-center font-medium">Start:</div>
             <div className="w-1/4 flex items-center gap-1">
               <select value={selectedBuilding} onChange={e => setSelectedBuilding(e.target.value)}
                       className="w-full px-2 py-2 rounded-lg border border-gray-300">
@@ -333,7 +333,7 @@ function App() {
           </div>
 
           <div className="flex flex-row gap-2 px-5">
-            <div className="w-1/4 flex items-center justify-center items-center text-white text-lg font-medium">Destination:</div>
+            <div className="w-1/4 flex items-center justify-center text-white text-lg font-medium">Destination:</div>
             <div className="w-1/4 flex items-center gap-1">
               <select value={toBuilding} onChange={e => setToBuilding(e.target.value)}
                       className="w-full px-2 py-2 rounded-lg border border-gray-300">

@@ -425,17 +425,20 @@ const MapComponent: React.FC<MapComponentProps> = ({ destination, currentFloor, 
           />
         ))}
 
-        {navigationMode && path && path.length > 1 && (
-          <Polyline
-            positions={
-              path
-                .map(id => nodes.find(n => n.id === id))
-                .filter(Boolean)
-                .map(n => n!.position)
-            }
-            pathOptions={{ color: 'red', weight: 5 }}
-          />
-        )}
+{navigationMode && path && path.length > 1 && nodes.length > 0 && (
+  <Polyline
+    positions={
+      path
+        .map(id => {
+          const node = nodes.find(n => n.id === id);
+          if (!node) console.warn(`Node with id "${id}" not found in current nodes`);
+          return node?.position;
+        })
+        .filter(Boolean) as [number, number][]
+    }
+    pathOptions={{ color: 'red', weight: 5 }}
+  />
+)}
       </MapContainer>
     </div>
   );
